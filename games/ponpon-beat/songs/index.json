@@ -1,0 +1,16 @@
+[
+  {
+    "id": "sample",
+    "title": "ポンポンビート",
+    "artist": "ビートくん",
+    "bpm": 128,
+    "file": "songs/sample.json"
+  },
+  {
+    "id": "fast",
+    "title": "ハイパービート",
+    "artist": "ビートくん",
+    "bpm": 160,
+    "file": "songs/fast.json"
+  }
+]
