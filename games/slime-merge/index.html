@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>くっつきスライム</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="screen-title" class="screen active">
+    <h1 class="logo">くっつき<br>スライム</h1>
+    <div class="title-scores">
+      <span class="label">ハイスコア</span>
+      <span id="title-best">0</span>
+    </div>
+    <button id="btn-start" class="btn-primary">スタート！</button>
+    <div class="hint">
+      <p>スワイプ or 矢印キーでスライムを動かそう</p>
+      <p>同じスライム同士がくっついて進化するよ！</p>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen">
+    <div class="game-header">
+      <div class="score-group">
+        <span class="label">スコア</span>
+        <span id="score">0</span>
+      </div>
+      <div class="score-group">
+        <span class="label">ベスト</span>
+        <span id="best">0</span>
+      </div>
+      <button id="btn-reset" class="btn-small">リセット</button>
+    </div>
+    <div class="board-wrap">
+      <div id="board" class="board">
+        <div class="board-bg">
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        </div>
+        <div id="tiles" class="tiles"></div>
+      </div>
+    </div>
+    <div id="overlay-gameover" class="overlay hidden">
+      <div class="overlay-inner">
+        <div class="overlay-emoji">😭</div>
+        <div class="overlay-title">ゲームオーバー</div>
+        <div class="overlay-score">スコア: <span id="go-score">0</span></div>
+        <div class="overlay-hs">ベスト: <span id="go-best">0</span></div>
+        <button id="btn-retry" class="btn-primary">もういちど！</button>
+        <button id="btn-title" class="btn-secondary">タイトルへ</button>
+      </div>
+    </div>
+    <div id="overlay-win" class="overlay hidden">
+      <div class="overlay-inner">
+        <div class="overlay-emoji">👑</div>
+        <div class="overlay-title">キングスライム誕生！</div>
+        <div class="overlay-sub">2048達成！</div>
+        <button id="btn-continue" class="btn-primary">つづける</button>
+        <button id="btn-retry-win" class="btn-secondary">もういちど！</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/sound.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
