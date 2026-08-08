@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>ポイポイブロック</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="screen-title" class="screen active">
+    <h1 class="logo">ポイポイ<br>ブロック</h1>
+    <div class="highscore-display">
+      <span class="stat-label">ハイスコア</span>
+      <span id="title-highscore">0</span>
+    </div>
+    <button id="btn-start" class="btn-primary">スタート！</button>
+    <div class="controls-hint">
+      <p>スマホ: スワイプで移動 / タップで回転</p>
+      <p>PC: ←→ 移動 ／ ↑ 回転 ／ スペース ドロップ</p>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen">
+    <div class="game-header">
+      <div class="stat-group">
+        <span class="stat-label">スコア</span>
+        <span id="score" class="stat-value">0</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">レベル</span>
+        <span id="level" class="stat-value">1</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">ライン</span>
+        <span id="lines" class="stat-value">0</span>
+      </div>
+      <div class="next-group">
+        <span class="stat-label">NEXT</span>
+        <canvas id="canvas-next"></canvas>
+      </div>
+      <div class="btn-group">
+        <button id="btn-mute" class="btn-icon">🔊</button>
+        <button id="btn-pause" class="btn-icon">⏸</button>
+      </div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="canvas-game"></canvas>
+      <div id="overlay-pause" class="overlay hidden">
+        <div class="overlay-inner">
+          <div class="overlay-title">⏸ ポーズ</div>
+          <button id="btn-resume" class="btn-primary">再開する</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-gameover" class="screen">
+    <h2 class="gameover-title">ゲームオーバー</h2>
+    <div class="result-card">
+      <div class="result-row"><span>スコア</span><span id="result-score">0</span></div>
+      <div class="result-row"><span>レベル</span><span id="result-level">0</span></div>
+      <div class="result-row"><span>ライン</span><span id="result-lines">0</span></div>
+      <div class="result-row result-highlight"><span>ハイスコア</span><span id="result-highscore">0</span></div>
+    </div>
+    <div class="button-stack">
+      <button id="btn-retry" class="btn-primary">もういちど！</button>
+      <button id="btn-title" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="js/tetromino.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
