@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>どこちがう？</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Title Screen -->
+  <div id="screen-title" class="screen active">
+    <h1 class="logo">🔍 どこちがう？</h1>
+    <p class="subtitle">２まいの絵のちがいを<br>みつけよう！</p>
+    <div id="stage-list" class="stage-list"></div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen">
+    <div class="game-header">
+      <button id="btn-back" class="btn-back">←</button>
+      <div class="game-info">
+        <span id="stage-title" class="stage-title-text"></span>
+        <span id="found-count" class="found-count">0/5</span>
+      </div>
+      <div class="hint-wrap">
+        <button id="btn-hint" class="btn-hint">💡<span id="hint-left">2</span></button>
+      </div>
+    </div>
+    <div class="images-wrap" id="images-wrap">
+      <div class="img-panel" id="panel-a">
+        <img id="img-a" src="" alt="左の絵">
+        <div class="marker-layer" id="markers-a"></div>
+      </div>
+      <div class="img-panel" id="panel-b">
+        <img id="img-b" src="" alt="右の絵">
+        <div class="marker-layer" id="markers-b"></div>
+      </div>
+    </div>
+    <div class="diff-indicators" id="diff-indicators"></div>
+  </div>
+
+  <!-- Clear Screen -->
+  <div id="screen-clear" class="screen">
+    <div class="clear-inner">
+      <div class="clear-emoji">🎉</div>
+      <h2 class="clear-title">クリア！</h2>
+      <div class="clear-time">クリアタイム: <span id="clear-time">0</span>秒</div>
+      <div class="clear-best">ベスト: <span id="clear-best">—</span>秒</div>
+      <button id="btn-next" class="btn-primary">つぎのステージ</button>
+      <button id="btn-title-clear" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <!-- Ending Screen -->
+  <div id="screen-ending" class="screen">
+    <div class="ending-inner">
+      <div class="ending-emoji">🌟</div>
+      <h2 class="ending-title">ぜんぶクリア！</h2>
+      <p class="ending-msg">すごい！ぜんぶのちがいを<br>みつけたね！</p>
+      <button id="btn-title-end" class="btn-primary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="js/sound.js"></script>
+  <script src="js/stage.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

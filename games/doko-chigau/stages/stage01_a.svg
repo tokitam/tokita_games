@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 220">
+  <!-- Sky -->
+  <defs>
+    <linearGradient id="sky1a" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#87CEEB"/>
+      <stop offset="100%" stop-color="#B0E0FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="220" fill="url(#sky1a)"/>
+  <!-- Ground -->
+  <rect x="0" y="160" width="300" height="60" fill="#7CB342"/>
+  <rect x="0" y="170" width="300" height="50" fill="#8BC34A"/>
+  <!-- Path -->
+  <ellipse cx="200" cy="210" rx="70" ry="15" fill="#D4A857" opacity="0.5"/>
+
+  <!-- Sun (with rays) -->
+  <circle cx="255" cy="38" r="18" fill="#FFD700"/>
+  <line x1="255" y1="14" x2="255" y2="6"  stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <line x1="255" y1="62" x2="255" y2="70" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <line x1="231" y1="38" x2="223" y2="38" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <line x1="279" y1="38" x2="287" y2="38" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <line x1="239" y1="22" x2="233" y2="16" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <line x1="271" y1="54" x2="277" y2="60" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <line x1="271" y1="22" x2="277" y2="16" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+  <line x1="239" y1="54" x2="233" y2="60" stroke="#FFD700" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Cloud (white) -->
+  <ellipse cx="82"  cy="52" rx="28" ry="16" fill="#fff"/>
+  <ellipse cx="62"  cy="58" rx="18" ry="13" fill="#fff"/>
+  <ellipse cx="102" cy="58" rx="18" ry="13" fill="#fff"/>
+
+  <!-- Left tree (dark green) -->
+  <rect x="50" y="130" width="16" height="35" fill="#795548" rx="2"/>
+  <polygon points="58,55 30,130 86,130" fill="#2E7D32"/>
+  <polygon points="58,75 32,140 84,140" fill="#388E3C"/>
+  <polygon points="58,95 36,148 80,148" fill="#43A047"/>
+
+  <!-- Right tree -->
+  <rect x="185" y="130" width="14" height="35" fill="#795548" rx="2"/>
+  <polygon points="192,70 168,130 216,130" fill="#33691E"/>
+  <polygon points="192,90 170,140 214,140" fill="#388E3C"/>
+  <polygon points="192,110 172,150 212,150" fill="#43A047"/>
+
+  <!-- Flowers -->
+  <line x1="155" y1="192" x2="155" y2="168" stroke="#5D4037" stroke-width="2"/>
+  <circle cx="155" cy="165" r="8" fill="#FFEE58"/>
+  <circle cx="148" cy="170" r="5" fill="#FFEE58"/>
+  <circle cx="162" cy="170" r="5" fill="#FFEE58"/>
+
+  <line x1="125" y1="195" x2="125" y2="175" stroke="#5D4037" stroke-width="2"/>
+  <circle cx="125" cy="172" r="6" fill="#FF7043"/>
+  <circle cx="119" cy="176" r="4" fill="#FF7043"/>
+  <circle cx="131" cy="176" r="4" fill="#FF7043"/>
+
+  <!-- Bench (with back) -->
+  <rect x="172" y="178" width="52" height="6"  rx="3" fill="#8D6E63"/>
+  <rect x="175" y="184" width="4"  height="12" rx="2" fill="#8D6E63"/>
+  <rect x="218" y="184" width="4"  height="12" rx="2" fill="#8D6E63"/>
+  <!-- Back support bar -->
+  <rect x="172" y="168" width="52" height="5"  rx="2" fill="#8D6E63"/>
+  <rect x="175" y="168" width="4"  height="12" rx="2" fill="#8D6E63"/>
+  <rect x="218" y="168" width="4"  height="12" rx="2" fill="#8D6E63"/>
+
+  <!-- Small bird -->
+  <ellipse cx="145" cy="85" rx="6" ry="4" fill="#F8BBD0"/>
+  <ellipse cx="150" cy="84" rx="4" ry="3" fill="#F8BBD0"/>
+  <polygon points="154,84 158,83 154,86" fill="#FF8F00"/>
+  <circle cx="151" cy="83" r="1.5" fill="#333"/>
+</svg>

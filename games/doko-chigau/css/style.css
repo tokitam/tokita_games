@@ -1,0 +1,252 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: linear-gradient(160deg, #e8f5e9 0%, #f3e5f5 100%);
+  font-family: 'Hiragino Maru Gothic Pro', 'Rounded Mplus 1c', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---- Screens ---- */
+.screen { display: none; width: 100%; max-width: 600px; flex-direction: column; align-items: center; }
+.screen.active { display: flex; }
+
+/* ---- Title ---- */
+#screen-title {
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 20px;
+  gap: 20px;
+}
+.logo { font-size: 2rem; font-weight: 900; color: #7B1FA2; text-shadow: 0 3px 0 rgba(0,0,0,0.1); }
+.subtitle { text-align: center; color: #666; font-size: 0.95rem; line-height: 1.6; }
+
+.stage-list { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.stage-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+  transition: transform 0.1s;
+  border: 2px solid transparent;
+}
+.stage-card:active { transform: scale(0.97); }
+.stage-card.cleared { border-color: #CE93D8; }
+.stage-card-name { font-size: 1.05rem; font-weight: 700; color: #333; }
+.stage-card-meta { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
+.stage-card-right { text-align: right; }
+.stage-star { font-size: 1.4rem; }
+.stage-best { font-size: 0.75rem; color: #9E9E9E; }
+
+/* ---- Game screen ---- */
+#screen-game {
+  height: 100vh;
+  max-width: 100%;
+  padding: 0;
+}
+
+.game-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  gap: 8px;
+  flex-shrink: 0;
+}
+.btn-back {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #555;
+}
+.game-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stage-title-text { font-size: 0.85rem; font-weight: 700; color: #555; }
+.found-count { font-size: 1.2rem; font-weight: 900; color: #7B1FA2; }
+.btn-hint {
+  background: linear-gradient(135deg, #FFD54F, #FF8F00);
+  border: none;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 3px 0 #e65100;
+}
+.btn-hint:active { transform: translateY(2px); box-shadow: 0 1px 0 #e65100; }
+.btn-hint:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+/* ---- Images ---- */
+.images-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  overflow: hidden;
+}
+@media (min-width: 500px) and (orientation: landscape) {
+  .images-wrap { flex-direction: row; }
+}
+
+.img-panel {
+  position: relative;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.img-panel img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.marker-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Correct marker */
+.marker {
+  position: absolute;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px #7B1FA2, 0 2px 8px rgba(0,0,0,0.3);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: markerPop 0.35s ease-out;
+}
+@keyframes markerPop {
+  0%   { transform: translate(-50%,-50%) scale(0.3); opacity: 0; }
+  70%  { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
+  100% { transform: translate(-50%,-50%) scale(1); }
+}
+
+/* Wrong tap marker */
+.wrong-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 1.4rem;
+  pointer-events: none;
+  animation: wrongFade 0.5s ease-out forwards;
+}
+@keyframes wrongFade {
+  0%   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%,-75%) scale(0.8); }
+}
+
+/* Hint pulse */
+.marker.hint-pulse { animation: hintPulse 0.8s ease-in-out; }
+@keyframes hintPulse {
+  0%, 100% { box-shadow: 0 0 0 2px #7B1FA2, 0 2px 8px rgba(0,0,0,0.3); }
+  50% { box-shadow: 0 0 0 10px rgba(123,31,162,0.3), 0 2px 8px rgba(0,0,0,0.3); }
+}
+
+/* Diff indicators (dots at bottom) */
+.diff-indicators {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 0;
+  flex-shrink: 0;
+}
+.diff-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ddd;
+  border: 2px solid #bbb;
+  transition: background 0.3s;
+}
+.diff-dot.found { background: #7B1FA2; border-color: #7B1FA2; }
+
+/* ---- Clear screen ---- */
+#screen-clear {
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 20px;
+}
+.clear-inner {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px;
+  text-align: center;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.clear-emoji { font-size: 3rem; }
+.clear-title { font-size: 1.8rem; font-weight: 900; color: #7B1FA2; }
+.clear-time, .clear-best { font-size: 1rem; color: #555; }
+
+/* ---- Ending ---- */
+#screen-ending {
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 20px;
+}
+.ending-inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.ending-emoji { font-size: 4rem; }
+.ending-title { font-size: 2rem; font-weight: 900; color: #7B1FA2; }
+.ending-msg { color: #555; line-height: 1.7; }
+
+/* ---- Buttons ---- */
+.btn-primary, .btn-secondary {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #CE93D8, #7B1FA2);
+  color: #fff;
+  box-shadow: 0 4px 0 #4a148c;
+}
+.btn-primary:active { transform: translateY(3px); box-shadow: 0 1px 0 #4a148c; }
+.btn-secondary {
+  background: #f0f0f0;
+  color: #555;
+  box-shadow: 0 4px 0 #bbb;
+}
+.btn-secondary:active { transform: translateY(3px); box-shadow: 0 1px 0 #bbb; }
