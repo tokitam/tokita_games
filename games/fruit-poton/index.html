@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>フルーツぽとん</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Title Screen -->
+  <div id="screen-title" class="screen active">
+    <h1 class="logo">🍉 フルーツぽとん</h1>
+    <div class="title-scores">
+      <span class="label">ハイスコア</span>
+      <span id="title-best">0</span>
+    </div>
+    <p class="title-rule">同じフルーツをくっつけて<br>どんどん進化させよう！</p>
+    <button id="btn-start" class="btn-primary">スタート！</button>
+    <div class="fruit-chain">🍇→🍋→🍊→🍎→🍐→🍑→🍍→🍈→🍉→🍉→🌟</div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen">
+    <div class="game-header">
+      <div class="score-group">
+        <span class="label">スコア</span>
+        <span id="score">0</span>
+      </div>
+      <div class="score-group">
+        <span class="label">ベスト</span>
+        <span id="best">0</span>
+      </div>
+      <div class="next-group">
+        <span class="label">NEXT</span>
+        <span id="next-fruit" class="next-emoji">🍇</span>
+      </div>
+    </div>
+    <div id="field-wrap">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Gameover Overlay -->
+  <div id="overlay-gameover" class="overlay hidden">
+    <div class="overlay-inner">
+      <div class="over-emoji">😱</div>
+      <div class="over-title">ゲームオーバー</div>
+      <div class="over-score">スコア: <span id="go-score">0</span></div>
+      <div class="over-best">ベスト: <span id="go-best">0</span></div>
+      <button id="btn-retry" class="btn-primary">もういちど！</button>
+      <button id="btn-title-go" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="vendor/matter.min.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/fruits.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
