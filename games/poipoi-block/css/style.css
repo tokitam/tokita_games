@@ -130,6 +130,7 @@ html, body {
 #screen-game {
   justify-content: flex-start;
   padding: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .game-header {
