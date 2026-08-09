@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>とき田ゲームズ</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #f0f4ff;
+      --primary: #6c63ff;
+      --secondary: #ff6b9d;
+      --card: #fff;
+      --text: #333;
+      --radius: 16px;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg);
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ---- Header ---- */
+    .site-header {
+      text-align: center;
+      padding: 32px 16px 24px;
+    }
+
+    .site-title {
+      font-size: clamp(1.8rem, 7vw, 2.8rem);
+      font-weight: 900;
+      color: var(--primary);
+      text-shadow: 3px 3px 0 rgba(108, 99, 255, 0.15);
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .site-count {
+      font-size: 0.9rem;
+      color: #aaa;
+      font-weight: 600;
+    }
+
+    /* ---- Grid ---- */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 16px 48px;
+    }
+
+    @media (max-width: 399px) {
+      .game-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* ---- Card ---- */
+    .game-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px 12px;
+      min-height: 110px;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+
+    .game-card:active {
+      transform: scale(0.94);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .game-emoji {
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    .game-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.35;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-title">🎮 とき田ゲームズ</div>
+    <div class="site-count">ぜんぶで 20 ほん！</div>
+  </header>
+
+  <main class="game-grid">
+    <a class="game-card" href="./okataduke-panic/index.html">
+      <span class="game-emoji">🧹</span>
+      <span class="game-name">お片付けパニック</span>
+    </a>
+    <a class="game-card" href="./bubble-shooter-3d/index.html">
+      <span class="game-emoji">🫧</span>
+      <span class="game-name">バブルシューター3D</span>
+    </a>
+    <a class="game-card" href="./okashi-defense/index.html">
+      <span class="game-emoji">🍬</span>
+      <span class="game-name">お菓子ディフェンス</span>
+    </a>
+    <a class="game-card" href="./stack-3d/index.html">
+      <span class="game-emoji">📦</span>
+      <span class="game-name">スタック3D</span>
+    </a>
+    <a class="game-card" href="./korokoro-maze/index.html">
+      <span class="game-emoji">🔮</span>
+      <span class="game-name">ころころ迷路</span>
+    </a>
+    <a class="game-card" href="./jump-and-jump/index.html">
+      <span class="game-emoji">🐸</span>
+      <span class="game-name">ジャンプとジャンプ</span>
+    </a>
+    <a class="game-card" href="./ponpon-cooking/index.html">
+      <span class="game-emoji">🍳</span>
+      <span class="game-name">ぽんぽんクッキング</span>
+    </a>
+    <a class="game-card" href="./koma-battle/index.html">
+      <span class="game-emoji">🌀</span>
+      <span class="game-name">くるくるコマ対決</span>
+    </a>
+    <a class="game-card" href="./fishing-friends/index.html">
+      <span class="game-emoji">🎣</span>
+      <span class="game-name">フィッシングフレンズ</span>
+    </a>
+    <a class="game-card" href="./slime-bowling/index.html">
+      <span class="game-emoji">🎳</span>
+      <span class="game-name">スライムボウリング</span>
+    </a>
+    <a class="game-card" href="./colorful-crash/index.html">
+      <span class="game-emoji">💥</span>
+      <span class="game-name">カラフルクラッシュ</span>
+    </a>
+    <a class="game-card" href="./iro-touch/index.html">
+      <span class="game-emoji">🎨</span>
+      <span class="game-name">いろタッチ</span>
+    </a>
+    <a class="game-card" href="./doko-chigau/index.html">
+      <span class="game-emoji">🔍</span>
+      <span class="game-name">どこちがう？</span>
+    </a>
+    <a class="game-card" href="./ponpon-beat/index.html">
+      <span class="game-emoji">🥁</span>
+      <span class="game-name">ポンポンビート</span>
+    </a>
+    <a class="game-card" href="./fruit-poton/index.html">
+      <span class="game-emoji">🍎</span>
+      <span class="game-name">フルーツぽとん</span>
+    </a>
+    <a class="game-card" href="./pyonpyon-bird/index.html">
+      <span class="game-emoji">🐦</span>
+      <span class="game-name">ぴょんぴょんバード</span>
+    </a>
+    <a class="game-card" href="./slime-merge/index.html">
+      <span class="game-emoji">🟢</span>
+      <span class="game-name">くっつきスライム</span>
+    </a>
+    <a class="game-card" href="./pair-animals/index.html">
+      <span class="game-emoji">🐾</span>
+      <span class="game-name">ペアペアどうぶつ</span>
+    </a>
+    <a class="game-card" href="./mogpon/index.html">
+      <span class="game-emoji">🐹</span>
+      <span class="game-name">モグポン！</span>
+    </a>
+    <a class="game-card" href="./poipoi-block/index.html">
+      <span class="game-emoji">🟪</span>
+      <span class="game-name">ポイポイブロック</span>
+    </a>
+  </main>
+</body>
+</html>
