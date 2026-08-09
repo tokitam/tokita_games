@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <script src="../ga.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>ねこキャッチシティ</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<div id="canvas-wrap"></div>
+
+<!-- Title Screen -->
+<div id="screen-title" class="screen">
+  <div class="title-logo">🐈 ねこキャッチ<br>シティ</div>
+  <p class="title-sub">街に隠れた 7 匹の猫を全部捕まえよう！</p>
+
+  <div class="mode-grid">
+    <div class="mode-card" id="btn-daily">
+      <span class="mode-icon">🗓️</span>
+      <div class="mode-title">きょうの街</div>
+      <div class="mode-best">ベスト: <span id="title-daily-best">--:--</span></div>
+    </div>
+    <div class="mode-card" id="btn-random">
+      <span class="mode-icon">🎲</span>
+      <div class="mode-title">ランダム</div>
+      <div class="mode-best">ベスト: <span id="title-rand-best">--:--</span></div>
+    </div>
+  </div>
+
+  <div class="char-select">
+    <div class="char-select-label">キャラクター</div>
+    <div class="char-grid" id="char-grid"></div>
+  </div>
+
+  <p class="hint">
+    スマホ: タップで移動 / ドラッグでカメラ回転<br>
+    PC: WASD / 矢印キー ／ ドラッグでカメラ回転
+  </p>
+</div>
+
+<!-- Minimap -->
+<canvas id="minimap" width="110" height="110" class="hidden"></canvas>
+
+<!-- HUD (overlaid on canvas, pointer-events: none) -->
+<div id="screen-hud" class="screen hidden">
+  <div class="hud-bar">
+    <span class="hud-stat" id="hud-cats">🐱 0/7</span>
+    <span class="hud-stat" id="hud-time">⏱ 0:00</span>
+  </div>
+</div>
+
+<!-- Cat direction indicator -->
+<div id="cat-indicator" class="hidden">
+  <div class="cat-arrow-ring">
+    <svg id="cat-arrow-icon" viewBox="0 0 20 30" width="22" height="22" style="display:block">
+      <polygon points="10,1 19,29 10,21 1,29" fill="currentColor"/>
+    </svg>
+  </div>
+  <div id="cat-dist-text"></div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Result Screen -->
+<div id="screen-result" class="screen hidden">
+  <div class="result-title">🎉 全員捕まえた！</div>
+  <div class="result-card">
+    <div class="result-time" id="result-time">0:00</div>
+    <div class="result-bestrow">ベスト: <span id="result-best">--:--</span></div>
+  </div>
+  <div class="result-newbest hidden" id="result-newbest">🏆 ベスト更新！</div>
+  <div class="btn-stack">
+    <button class="btn-primary" id="btn-retry">もういちど！</button>
+    <div class="btn-row">
+      <button class="btn-secondary" id="btn-daily2">きょうの街</button>
+      <button class="btn-secondary" id="btn-random2">ランダム</button>
+    </div>
+    <button class="btn-secondary" id="btn-title2">タイトルへ</button>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
