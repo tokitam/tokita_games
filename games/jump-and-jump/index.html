@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>ジャンプとジャンプ</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Title Screen -->
+  <div id="screen-title" class="screen">
+    <h1 class="logo">🐸 ジャンプとジャンプ</h1>
+    <div class="title-scores">
+      <span class="label">ハイスコア</span>
+      <span id="title-best">0</span>
+    </div>
+    <p class="title-rule">足場を踏んで上へ上へ！<br>左右を押しながら移動できるよ</p>
+    <button id="btn-start" class="btn-primary">スタート！</button>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen hidden">
+    <div class="game-header">
+      <div class="info-group">
+        <span class="label">たかさ</span>
+        <span id="score">0</span>
+      </div>
+      <div class="info-group">
+        <span class="label">ベスト</span>
+        <span id="best">0</span>
+      </div>
+    </div>
+    <canvas id="renderCanvas"></canvas>
+    <div class="touch-zones">
+      <div id="zone-left"  class="touch-zone">◀</div>
+      <div id="zone-right" class="touch-zone">▶</div>
+    </div>
+  </div>
+
+  <!-- Gameover Screen -->
+  <div id="screen-gameover" class="screen hidden">
+    <div class="result-inner">
+      <div class="result-emoji">💀</div>
+      <div class="result-title">ゲームオーバー</div>
+      <div class="result-score">たかさ: <span id="go-score">0</span></div>
+      <div class="result-best">ベスト: <span id="go-best">0</span></div>
+      <button id="btn-retry" class="btn-primary">もういちど！</button>
+      <button id="btn-title" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
