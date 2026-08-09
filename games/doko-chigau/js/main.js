@@ -85,29 +85,27 @@
   }
 
   // ---- Tap handling ----
-  function getTapNorm(e, panel) {
-    var rect = panel.getBoundingClientRect();
-    var clientX, clientY;
-    if (e.touches) {
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      clientX = e.clientX;
-      clientY = e.clientY;
-    }
-    var nx = (clientX - rect.left) / rect.width;
-    var ny = (clientY - rect.top)  / rect.height;
-    return { x: nx, y: ny };
-  }
-
   function handleTap(e, isRightPanel) {
     e.preventDefault();
     var state = Stage.getState();
     if (!state || state.finished) return;
 
     var panel = isRightPanel ? el('panel-b') : el('panel-a');
-    var norm = getTapNorm(e, panel);
-    var index = Stage.checkTap(norm.x, norm.y);
+    var vb    = Stage.getViewBox();
+    var rect  = panel.getBoundingClientRect();
+    // object-fit:contain の余白を考慮した座標変換
+    var scale = Math.min(rect.width / vb.w, rect.height / vb.h);
+    var offX  = (rect.width  - vb.w * scale) / 2;
+    var offY  = (rect.height - vb.h * scale) / 2;
+    var nx = (e.clientX - rect.left - offX) / (vb.w * scale);
+    var ny = (e.clientY - rect.top  - offY) / (vb.h * scale);
+
+    // 余白（レターボックス）のタップは無視
+    if (nx < 0 || nx > 1 || ny < 0 || ny > 1) return;
+
+    // 指のサイズを考慮した最低判定半径（画面上24px相当）
+    var minR  = 24 / scale;
+    var index = Stage.checkTap(nx, ny, minR);
 
     if (index >= 0) {
       Sound.play('correct');
@@ -118,15 +116,12 @@
       }
     } else {
       Sound.play('wrong');
-      // Show wrong mark
+      // ✕マークを補正後の座標に表示
       var wrongEl = document.createElement('div');
       wrongEl.className = 'wrong-marker';
       wrongEl.textContent = '✕';
-      var rect = panel.getBoundingClientRect();
-      var pxX = norm.x * rect.width;
-      var pxY = norm.y * rect.height;
-      wrongEl.style.left = pxX + 'px';
-      wrongEl.style.top  = pxY + 'px';
+      wrongEl.style.left = (offX + nx * vb.w * scale) + 'px';
+      wrongEl.style.top  = (offY + ny * vb.h * scale) + 'px';
       panel.appendChild(wrongEl);
       setTimeout(function() { if (wrongEl.parentNode) wrongEl.parentNode.removeChild(wrongEl); }, 500);
     }
@@ -228,8 +223,8 @@
 
   // ---- Input ----
   function initPanelEvents(panelEl, isRight) {
-    panelEl.addEventListener('click', function(e) { handleTap(e, isRight); });
-    panelEl.addEventListener('touchend', function(e) { e.preventDefault(); handleTap(e, isRight); }, { passive: false });
+    // pointerdown に統一（touchend は e.touches が空になりスマホで例外が発生するため廃止）
+    panelEl.addEventListener('pointerdown', function(e) { handleTap(e, isRight); });
   }
 
   // ---- Navigation ----
