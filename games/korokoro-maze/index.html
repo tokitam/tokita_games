@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>ころころ迷路</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Title Screen -->
+  <div id="screen-title" class="screen">
+    <h1 class="logo">🎱 ころころ迷路</h1>
+    <p class="title-rule">画面をドラッグして盤面を傾け<br>ボールをゴールへ転がそう！</p>
+    <div class="stage-buttons">
+      <button class="btn-stage" data-stage="0">ステージ1<br><small id="best-0">-</small></button>
+      <button class="btn-stage" data-stage="1">ステージ2<br><small id="best-1">-</small></button>
+      <button class="btn-stage" data-stage="2">ステージ3<br><small id="best-2">-</small></button>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen hidden">
+    <div class="game-header">
+      <div class="info-group">
+        <span class="label" id="stage-label">ステージ1</span>
+      </div>
+      <div class="info-group">
+        <span class="label">タイム</span>
+        <span id="timer">0.0</span>
+      </div>
+      <div class="info-group">
+        <span class="label">ベスト</span>
+        <span id="best-current">-</span>
+      </div>
+    </div>
+    <canvas id="renderCanvas"></canvas>
+    <div id="fall-msg" class="fall-msg hidden">💀 スタートに戻る</div>
+  </div>
+
+  <!-- Clear Screen -->
+  <div id="screen-clear" class="screen hidden">
+    <div class="result-inner">
+      <div class="result-emoji">🎉</div>
+      <div class="result-title">クリア！</div>
+      <div class="result-score">タイム: <span id="clear-time">0.0</span> 秒</div>
+      <div class="result-best">ベスト: <span id="clear-best">-</span> 秒</div>
+      <button id="btn-next" class="btn-primary">次のステージ</button>
+      <button id="btn-retry" class="btn-secondary">もういちど</button>
+      <button id="btn-title" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/stages.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
