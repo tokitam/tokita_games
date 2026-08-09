@@ -28,11 +28,11 @@ function todayKey() {
 
 // ── Character list (CC0 / Quaternius) ────────────────────────────────────────
 const CHARACTERS = [
-  { id: 'default', label: 'デフォルト',   emoji: '🧍', file: './models/character.glb'  },
-  { id: 'girl',    label: '女の子',       emoji: '👧', file: './models/char_girl.glb'   },
+  { id: 'default', label: 'デフォルト',   emoji: '🧍', file: './models/character.glb'   },
+  { id: 'girl',    label: '冒険者',       emoji: '🗡️', file: './models/char_girl.glb'   },
+  { id: 'woman',   label: 'カジュアル',   emoji: '👩', file: './models/char_woman.glb'  },
   { id: 'man',     label: '青年',         emoji: '🧑', file: './models/char_man.glb'    },
   { id: 'agent',   label: 'エージェント', emoji: '🕵️', file: './models/char_agent.glb'  },
-  { id: 'teen',    label: 'こども',       emoji: '🧒', file: './models/char_teen.glb'   },
   { id: 'costume', label: 'コスチューム', emoji: '🧙', file: './models/char_costume.glb'},
 ];
 let selectedCharId = localStorage.getItem('neko-catch-city.char') || 'default';
