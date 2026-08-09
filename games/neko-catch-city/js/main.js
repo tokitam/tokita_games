@@ -130,6 +130,7 @@ async function startGame(mode, seed) {
   scene.add(goalMarker);
 
   updateHUD(0, catManager.total);
+  el('minimap').classList.remove('hidden');
   lastTime = null;
   gameRunning = true;
 }
@@ -219,6 +220,60 @@ function onPointerUp(e) {
   isDragging = false;
 }
 
+// ── Minimap ───────────────────────────────────────────────────────────────────
+let _mmCtx = null;
+function getMinimapCtx() {
+  if (!_mmCtx) { const c = document.getElementById('minimap'); if (c) _mmCtx = c.getContext('2d'); }
+  return _mmCtx;
+}
+
+function drawMinimap() {
+  const ctx = getMinimapCtx();
+  if (!ctx || !catManager || !controller) return;
+  const W = 110, H = 110;
+  const half = CONFIG.citySize / 2;
+  const scale = W / CONFIG.citySize;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = 'rgba(0,0,0,0.62)';
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(0, 0, W, H, 6); else ctx.rect(0, 0, W, H);
+  ctx.fill();
+
+  // City border
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(2, 2, W - 4, H - 4);
+
+  // Cats (dot — golden は大きめ)
+  for (const cat of catManager.cats) {
+    if (cat.state === 'caught') continue;
+    const cx = (cat.root.position.x + half) * scale;
+    const cy = (cat.root.position.z + half) * scale;
+    ctx.beginPath();
+    ctx.arc(cx, cy, cat.isGolden ? 4.5 : 3, 0, Math.PI * 2);
+    ctx.fillStyle = cat.isGolden ? '#ffd700' : '#ff6b9d';
+    ctx.fill();
+  }
+
+  // Player (向き付き三角)
+  const px = (controller.position.x + half) * scale;
+  const py = (controller.position.z + half) * scale;
+  ctx.save();
+  ctx.translate(px, py);
+  ctx.rotate(controller.yaw);
+  ctx.beginPath();
+  ctx.moveTo(0, 5);    // 先端（+Z 方向 = canvas 下）
+  ctx.lineTo(4, -3);
+  ctx.lineTo(-4, -3);
+  ctx.closePath();
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.restore();
+}
+
 // ── Main loop ─────────────────────────────────────────────────────────────────
 function tick(time) {
   const dt = Math.min(lastTime === null ? 0 : (time - lastTime) / 1000, CONFIG.maxDt);
@@ -269,6 +324,7 @@ function tick(time) {
   }
 
   renderer.render(scene, cam.camera);
+  drawMinimap();
 }
 
 // ── End game ──────────────────────────────────────────────────────────────────
@@ -287,8 +343,9 @@ function endGame() {
   el('btn-retry').onclick  = () => startGame(gameMode, gameSeed);
   el('btn-daily2').onclick = () => startGame('daily',  todaySeed());
   el('btn-random2').onclick = () => startGame('random', randomSeed());
-  el('btn-title2').onclick = () => { showScreen('title'); setupTitle(); };
+  el('btn-title2').onclick = () => { el('minimap').classList.add('hidden'); showScreen('title'); setupTitle(); };
 
+  el('minimap').classList.add('hidden');
   showScreen('result');
 }
 

@@ -53,6 +53,7 @@ export const CONFIG = {
   catCatchDist: 1.2,
   catFleeStartDist: 8,
   goldenFleeStartDist: 12,
+  catFleeSpeedMin: 1.0,
   catFleeSpeed: 3.2,
   goldenFleeSpeed: 4.5,
   catStopDist: 14,

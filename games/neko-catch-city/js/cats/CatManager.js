@@ -27,11 +27,18 @@ export class CatManager {
 
       const isGolden = i === total - 1;
       const colorKey = COLOR_KEYS[i % COLOR_KEYS.length];
-      const cat = new Cat(x, z, isGolden, colorKey);
+      // 通常猫は index に応じて速度を線形補間（最初が最も遅い）
+      const t = CONFIG.catCount > 1 ? i / (CONFIG.catCount - 1) : 1;
+      const fleeSpeed = isGolden
+        ? CONFIG.goldenFleeSpeed
+        : CONFIG.catFleeSpeedMin + (CONFIG.catFleeSpeed - CONFIG.catFleeSpeedMin) * t;
+      const cat = new Cat(x, z, isGolden, colorKey, fleeSpeed);
       this._cats.push(cat);
       this._scene.add(cat.root);
     }
   }
+
+  get cats() { return this._cats; }
 
   get total() { return this._cats.length; }
   get caught() { return this._cats.filter(c => c.state === 'caught').length; }

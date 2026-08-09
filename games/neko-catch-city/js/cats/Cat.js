@@ -12,11 +12,12 @@ const COLORS = {
 const COLOR_KEYS = ['white', 'black', 'tora', 'mike', 'gray', 'cream'];
 
 export class Cat {
-  constructor(x, z, isGolden, colorKey) {
+  constructor(x, z, isGolden, colorKey, fleeSpeed) {
     this.isGolden = isGolden;
     this.state = 'idle'; // idle | flee | caught
     this._vel = new THREE.Vector2(0, 0);
     this._idleTimer = 0;
+    this._fleeSpeed = fleeSpeed ?? (isGolden ? 4.5 : 3.2);
 
     const ck = isGolden ? 'golden' : (colorKey || COLOR_KEYS[0]);
     const c = COLORS[ck] || COLORS.white;
@@ -98,7 +99,7 @@ export class Cat {
     const dist = Math.hypot(dx, dz);
     const fleeStart = this.isGolden ? 12 : 8;
     const stopDist  = this.isGolden ? 20 : 14;
-    const fleeSpeed = this.isGolden ? 4.5 : 3.2;
+    const fleeSpeed = this._fleeSpeed;
 
     if (this.state === 'idle') {
       if (dist < fleeStart) this.state = 'flee';
