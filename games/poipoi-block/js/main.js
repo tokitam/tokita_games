@@ -37,6 +37,7 @@
     state.running = true;
     el('overlay-pause').classList.add('hidden');
     showScreen('game');
+    Renderer.resize();
     rafId = requestAnimationFrame(loop);
   }
 

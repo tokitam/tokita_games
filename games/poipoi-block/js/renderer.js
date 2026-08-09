@@ -49,10 +49,10 @@ var Renderer = (function() {
 
   function resize() {
     dpr = window.devicePixelRatio || 1;
-    var header = document.querySelector('.game-header');
-    var headerH = header ? header.offsetHeight : 58;
-    var availW = Math.min(window.innerWidth, 420);
-    var availH = window.innerHeight - headerH;
+    var wrap = canvas.parentElement;
+    var availW = Math.min(wrap.clientWidth, 420);
+    var availH = wrap.clientHeight;
+    if (availW <= 0 || availH <= 0) return;
     cellSize = Math.floor(Math.min(availW / COLS, availH / ROWS));
 
     canvas.style.width  = (cellSize * COLS) + 'px';
