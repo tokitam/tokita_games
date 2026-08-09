@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>カラフルクラッシュ</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Title Screen -->
+  <div id="screen-title" class="screen active">
+    <h1 class="logo">🎮 カラフルクラッシュ</h1>
+    <div class="title-hs">
+      <span class="hs-label">ハイスコア</span>
+      <span id="title-hs">0</span>
+    </div>
+    <p class="title-hint">パドルを動かしてブロックを全部壊そう！</p>
+    <button id="btn-start" class="btn-primary">スタート！</button>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen">
+    <div class="game-hud">
+      <div class="hud-item">
+        <span class="hud-label">スコア</span>
+        <span id="hud-score">0</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">レベル</span>
+        <span id="hud-level">1</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">残機</span>
+        <span id="hud-lives">❤️❤️❤️</span>
+      </div>
+    </div>
+    <div id="effects-bar" class="effects-bar"></div>
+    <div id="canvas-wrap">
+      <canvas id="canvas"></canvas>
+      <div id="overlay-pause" class="canvas-overlay hidden">
+        <div class="overlay-msg">⏸ ポーズ中<br><small>タップで再開</small></div>
+      </div>
+      <div id="overlay-stage" class="canvas-overlay hidden">
+        <div class="overlay-msg" id="stage-msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gameover Screen -->
+  <div id="screen-gameover" class="screen">
+    <div class="go-inner">
+      <div class="go-emoji">💥</div>
+      <h2 class="go-title">ゲームオーバー</h2>
+      <div class="go-stats">
+        <div class="go-stat">
+          <span class="go-label">スコア</span>
+          <span id="go-score" class="go-val big">0</span>
+        </div>
+        <div class="go-stat">
+          <span class="go-label">ハイスコア</span>
+          <span id="go-best" class="go-val">0</span>
+        </div>
+        <div class="go-stat">
+          <span class="go-label">レベル</span>
+          <span id="go-level" class="go-val">1</span>
+        </div>
+      </div>
+      <button id="btn-retry" class="btn-primary">もういちど！</button>
+      <button id="btn-title" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="js/sound.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
