@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>いろタッチ</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Title Screen -->
+  <div id="screen-title" class="screen active">
+    <h1 class="logo">🎨 いろタッチ</h1>
+    <p class="rule-text">
+      もじの <strong>いろ</strong> と おなじ<br>
+      パネルをタップしよう！<br>
+      <small>（もじのいみじゃないよ！）</small>
+    </p>
+    <div class="title-hs-wrap">
+      <span class="hs-label">ハイスコア</span>
+      <span id="title-hs" class="hs-val">0</span>
+    </div>
+    <button id="btn-start" class="btn-primary">スタート！</button>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen">
+    <div class="game-top">
+      <div class="timer-bar-wrap">
+        <div id="timer-bar" class="timer-bar"></div>
+      </div>
+      <div class="hud-row">
+        <span class="hud-label">のこり</span>
+        <span id="time-left" class="hud-time">20</span>
+        <span class="hud-label">びょう</span>
+        <span class="hud-sep"></span>
+        <span class="hud-label">スコア</span>
+        <span id="hud-score" class="hud-score">0</span>
+      </div>
+    </div>
+
+    <div class="question-area">
+      <div id="question-text" class="question-text">あか</div>
+      <div id="question-rule" class="question-rule">↑ この色のパネルをタップ！</div>
+    </div>
+
+    <div id="color-panels" class="color-panels"></div>
+  </div>
+
+  <!-- Gameover Screen -->
+  <div id="screen-gameover" class="screen">
+    <div class="go-inner">
+      <div class="go-emoji">🏁</div>
+      <h2 class="go-title">タイムアップ！</h2>
+      <div class="go-score-wrap">
+        <div class="go-stat">
+          <span class="go-label">スコア</span>
+          <span id="go-score" class="go-val big">0</span>
+        </div>
+        <div class="go-stat">
+          <span class="go-label">ハイスコア</span>
+          <span id="go-best" class="go-val">0</span>
+        </div>
+      </div>
+      <button id="btn-retry" class="btn-primary">もういちど！</button>
+      <button id="btn-title" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="js/sound.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
