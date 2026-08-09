@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>スライムボウリング</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Title Screen -->
+  <div id="screen-title" class="screen">
+    <h1 class="logo">🎳 スライムボウリング</h1>
+    <div class="title-scores">
+      <span class="label">ハイスコア</span>
+      <span id="title-best">0</span>
+    </div>
+    <p class="title-rule">スライムボールをスワイプで投げて<br>ピンを倒そう！5フレーム勝負！</p>
+    <button id="btn-start" class="btn-primary">スタート！</button>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen hidden">
+    <div class="game-header">
+      <div class="info-group">
+        <span class="label">フレーム</span>
+        <span id="current-frame">1 / 5</span>
+      </div>
+      <div class="info-group">
+        <span id="current-throw">1 投目</span>
+      </div>
+    </div>
+    <div class="score-table">
+      <div class="score-row label-row">
+        <div class="frame-label">1F</div>
+        <div class="frame-label">2F</div>
+        <div class="frame-label">3F</div>
+        <div class="frame-label">4F</div>
+        <div class="frame-label">5F</div>
+      </div>
+      <div class="score-row cell-row">
+        <div class="frame-cell"><span id="frame-0-1">-</span><span id="frame-0-2">-</span></div>
+        <div class="frame-cell"><span id="frame-1-1">-</span><span id="frame-1-2">-</span></div>
+        <div class="frame-cell"><span id="frame-2-1">-</span><span id="frame-2-2">-</span></div>
+        <div class="frame-cell"><span id="frame-3-1">-</span><span id="frame-3-2">-</span></div>
+        <div class="frame-cell"><span id="frame-4-1">-</span><span id="frame-4-2">-</span></div>
+      </div>
+    </div>
+    <canvas id="renderCanvas"></canvas>
+    <div id="message" class="message hidden"></div>
+    <div class="controls-hint">↑スワイプで投球 ／ 左右ドラッグで立ち位置調整</div>
+  </div>
+
+  <!-- Result Screen -->
+  <div id="screen-result" class="screen hidden">
+    <div class="result-inner">
+      <div class="result-emoji">🎳</div>
+      <div class="result-title">ゲーム終了！</div>
+      <div class="result-score">スコア: <span id="result-score">0</span></div>
+      <div class="result-best">ベスト: <span id="result-best">0</span></div>
+      <button id="btn-restart" class="btn-primary">もういちど！</button>
+      <button id="btn-title" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cannon@0.6.2/build/cannon.min.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
