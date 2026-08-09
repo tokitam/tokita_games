@@ -3,10 +3,10 @@
 const JumpGame = (() => {
   // 難易度定義
   const DIFFICULTIES = {
-    'ちょうかんたん': { gravity: 0.010, baseSpacing: 2.0, maxSpacing: 2.6, platHalf: 1.05, moveStart: 80,  cloudStart: 150, moveSpeed: 0.008, color: '#64B5F6', label: 'ちょうかんたん' },
-    'かんたん':       { gravity: 0.011, baseSpacing: 2.1, maxSpacing: 2.9, platHalf: 0.95, moveStart: 60,  cloudStart: 120, moveSpeed: 0.010, color: '#81C784', label: 'かんたん' },
-    'ふつう':         { gravity: 0.012, baseSpacing: 2.2, maxSpacing: 3.2, platHalf: 0.85, moveStart: 50,  cloudStart: 100, moveSpeed: 0.012, color: '#FFD54F', label: 'ふつう' },
-    'むずい':         { gravity: 0.014, baseSpacing: 2.4, maxSpacing: 3.5, platHalf: 0.70, moveStart: 30,  cloudStart: 60,  moveSpeed: 0.016, color: '#EF5350', label: 'むずい' },
+    'ちょうかんたん': { gravity: 0.007, baseSpacing: 1.8, maxSpacing: 2.2, platHalf: 1.25, moveStart: 150, cloudStart: 250, moveSpeed: 0.005, color: '#64B5F6', label: 'ちょうかんたん' },
+    'かんたん':       { gravity: 0.008, baseSpacing: 1.9, maxSpacing: 2.4, platHalf: 1.10, moveStart: 100, cloudStart: 180, moveSpeed: 0.007, color: '#81C784', label: 'かんたん' },
+    'ふつう':         { gravity: 0.009, baseSpacing: 2.0, maxSpacing: 2.7, platHalf: 1.00, moveStart: 70,  cloudStart: 130, moveSpeed: 0.009, color: '#FFD54F', label: 'ふつう' },
+    'むずい':         { gravity: 0.011, baseSpacing: 2.2, maxSpacing: 3.0, platHalf: 0.85, moveStart: 50,  cloudStart: 90,  moveSpeed: 0.012, color: '#EF5350', label: 'むずい' },
   };
 
   // 物理定数（難易度で上書き）
@@ -48,7 +48,7 @@ const JumpGame = (() => {
   }
 
   function spacing(height) {
-    const t = Math.min(1, height / 300);
+    const t = Math.min(1, height / 500);
     return BASE_SPACING + (MAX_SPACING - BASE_SPACING) * t;
   }
 
@@ -97,7 +97,8 @@ const JumpGame = (() => {
     if (char.x > WRAP_X)  char.x -= WRAP_X * 2;
     if (char.x < -WRAP_X) char.x += WRAP_X * 2;
 
-    // 重力
+    // 重力（スイープ判定のため更新前の位置を保持）
+    const prevY = char.y;
     char.vy -= GRAVITY;
     char.y  += char.vy;
 
@@ -110,15 +111,14 @@ const JumpGame = (() => {
       }
     });
 
-    // 着地判定（下降中のみ）
+    // 着地判定（スイープ方式: 足場上面をまたいだかで判定、すり抜け防止）
     if (char.vy < 0) {
       for (const p of platforms) {
         if (p.used) continue;
-        const dy = char.y - p.y;
-        if (dy >= 0 && dy < LAND_THR) {
-          // X距離判定（Z方向は奥行き演出のみで判定不使用）
+        if (prevY >= p.y && char.y <= p.y + LAND_THR) {
           const dx = Math.abs(char.x - p.x);
           if (dx < PLAT_HALF) {
+            char.y = p.y; // 足場面に吸着
             land(p);
             break;
           }
