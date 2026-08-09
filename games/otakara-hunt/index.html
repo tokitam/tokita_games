@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <script src="../ga.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>キラキラおたからハント</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<div id="canvas-wrap"></div>
+
+<!-- Screen glow overlay (proximity to treasure) -->
+<div id="screen-glow"></div>
+
+<!-- Title Screen -->
+<div id="screen-title" class="screen">
+  <div class="title-logo">💎 キラキラ<br>おたからハント</div>
+  <p class="title-sub">街に隠された 5 つのおたからを発掘しよう！<br>近づくほどソナーが鳴り速くなるよ！</p>
+
+  <div class="mode-grid">
+    <div class="mode-card" id="btn-daily">
+      <span class="mode-icon">🗓️</span>
+      <div class="mode-title">きょうの街</div>
+      <div class="mode-best">ベスト: <span id="title-daily-best">--:--</span></div>
+    </div>
+    <div class="mode-card" id="btn-random">
+      <span class="mode-icon">🎲</span>
+      <div class="mode-title">ランダム</div>
+      <div class="mode-best">ベスト: <span id="title-rand-best">--:--</span></div>
+    </div>
+  </div>
+
+  <p class="hint">
+    スマホ: タップで移動 / ドラッグでカメラ回転<br>
+    PC: WASD / 矢印キー ／ ドラッグでカメラ回転<br>
+    近くに来るとキラキラが見えるよ ✨
+  </p>
+</div>
+
+<!-- Minimap -->
+<canvas id="minimap" width="110" height="110" class="hidden"></canvas>
+
+<!-- HUD -->
+<div id="screen-hud" class="screen hidden">
+  <div class="hud-bar">
+    <span class="hud-stat" id="hud-found">💎 0/5</span>
+    <span class="hud-stat" id="hud-time">⏱ 0:00</span>
+  </div>
+</div>
+
+<!-- Treasure direction indicator -->
+<div id="treasure-indicator" class="hidden">
+  <div class="treasure-arrow-ring">
+    <svg id="treasure-arrow-icon" viewBox="0 0 20 30" width="22" height="22" style="display:block">
+      <polygon points="10,1 19,29 10,21 1,29" fill="currentColor"/>
+    </svg>
+  </div>
+  <div id="treasure-dist-text"></div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Result Screen -->
+<div id="screen-result" class="screen hidden">
+  <div class="result-title">🎉 全部発掘した！</div>
+  <div class="result-card">
+    <div class="result-time" id="result-time">0:00</div>
+    <div class="result-bestrow">ベスト: <span id="result-best">--:--</span></div>
+  </div>
+  <div class="result-newbest hidden" id="result-newbest">🏆 ベスト更新！</div>
+  <div class="btn-stack">
+    <button class="btn-primary" id="btn-retry">もういちど！</button>
+    <div class="btn-row">
+      <button class="btn-secondary" id="btn-daily2">きょうの街</button>
+      <button class="btn-secondary" id="btn-random2">ランダム</button>
+    </div>
+    <button class="btn-secondary" id="btn-title2">タイトルへ</button>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
