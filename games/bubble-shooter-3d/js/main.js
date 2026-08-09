@@ -205,6 +205,33 @@
 
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
+  // オーバーレイ画面でのタップ処理（デバウンス共有）
+  let lastTap = 0;
+
+  function onScreenTap() {
+    if (gamePhase === 'title' || gamePhase === 'over' || gamePhase === 'clear') {
+      startGame();
+    } else if (gamePhase === 'stageclear') {
+      showOverlay(null);
+      clearBubbleMeshes();
+      hudEl.classList.remove('hidden');
+      nextWrapEl.classList.remove('hidden');
+      gamePhase = 'playing';
+      stageNumEl.textContent = BubbleGame.getStage() + 1;
+      BubbleGame.nextStage();
+    }
+  }
+
+  // 全画面オーバーレイはタップを吸収するため個別にリスナーを登録
+  ['overlay-title', 'overlay-stage', 'overlay-clear', 'overlay-gameover'].forEach(id => {
+    document.getElementById(id).addEventListener('pointerdown', () => {
+      const now = Date.now();
+      if (now - lastTap < 120) return;
+      lastTap = now;
+      onScreenTap();
+    });
+  });
+
   canvas.addEventListener('pointerdown', e => {
     swipeStart = { x: e.clientX, y: e.clientY, time: Date.now() };
   });
@@ -225,18 +252,11 @@
     const dist = Math.sqrt(dx*dx + dy*dy);
 
     if (dist < 10) {
-      // Tap
-      if (gamePhase === 'title' || gamePhase === 'over' || gamePhase === 'clear') {
-        startGame();
-      } else if (gamePhase === 'stageclear') {
-        showOverlay(null);
-        clearBubbleMeshes();
-        hudEl.classList.remove('hidden');
-        nextWrapEl.classList.remove('hidden');
-        gamePhase = 'playing';
-        stageNumEl.textContent = BubbleGame.getStage() + 1;
-        BubbleGame.nextStage();
-      } else if (gamePhase === 'playing') {
+      const now = Date.now();
+      if (now - lastTap < 120) { swipeStart = null; return; }
+      lastTap = now;
+
+      if (gamePhase === 'playing') {
         // Shoot toward screen center → camera forward direction
         const ray = scene.createPickingRay(
           canvas.clientWidth / 2,
@@ -246,6 +266,8 @@
         );
         const d = ray.direction;
         BubbleGame.shoot(d.x, d.y, d.z);
+      } else {
+        onScreenTap();
       }
     }
 
