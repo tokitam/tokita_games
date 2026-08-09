@@ -90,7 +90,7 @@ export class Cat {
     this._ring = ring;
   }
 
-  update(dt, playerX, playerZ) {
+  update(dt, playerX, playerZ, world) {
     if (this.state === 'caught') return;
 
     const dx = this.root.position.x - playerX;
@@ -117,6 +117,13 @@ export class Cat {
       }
       this.root.position.x += this._vel.x * dt;
       this.root.position.z += this._vel.y * dt;
+
+      if (world) {
+        const solved = world.resolveCircle(this.root.position.x, this.root.position.z, 0.22);
+        this.root.position.x = solved.x;
+        this.root.position.z = solved.z;
+      }
+
       this.root.rotation.y = Math.atan2(this._vel.x, this._vel.y);
 
       // running animation

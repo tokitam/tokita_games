@@ -41,7 +41,7 @@ export class CatManager {
     const toRemove = [];
     for (const cat of this._cats) {
       if (cat.state !== 'caught') {
-        cat.update(dt, playerX, playerZ);
+        cat.update(dt, playerX, playerZ, this._world);
 
         // Catch check
         const dx = cat.root.position.x - playerX;
