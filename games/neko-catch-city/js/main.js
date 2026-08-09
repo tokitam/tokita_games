@@ -39,6 +39,7 @@ const ptStart = { x: 0, y: 0, t: 0 };
 let lastTapTime = 0;
 let isDragging = false;
 let dragDX = 0, dragDY = 0;
+let prevPX = 0, prevPY = 0;
 let keyState = {};
 
 // ── DOM helpers ───────────────────────────────────────────────────────────────
@@ -148,10 +149,10 @@ function initRenderer() {
     if (cam) { cam.camera.aspect = window.innerWidth / window.innerHeight; cam.camera.updateProjectionMatrix(); }
   });
 
-  // Pointer input on canvas
+  // Pointer input — down on canvas, move/up on window to avoid losing events outside canvas
   renderer.domElement.addEventListener('pointerdown', onPointerDown);
-  renderer.domElement.addEventListener('pointermove', onPointerMove);
-  renderer.domElement.addEventListener('pointerup', onPointerUp);
+  window.addEventListener('pointermove', onPointerMove);
+  window.addEventListener('pointerup', onPointerUp);
   renderer.domElement.setAttribute('touch-action', 'none');
 
   // Keyboard
@@ -176,6 +177,7 @@ function screenToGround(clientX, clientY) {
 // ── Pointer handlers ──────────────────────────────────────────────────────────
 function onPointerDown(e) {
   ptStart.x = e.clientX; ptStart.y = e.clientY; ptStart.t = performance.now();
+  prevPX = e.clientX; prevPY = e.clientY;
   isDragging = false; dragDX = 0; dragDY = 0;
   renderer.domElement.setPointerCapture(e.pointerId);
 }
@@ -183,11 +185,15 @@ function onPointerDown(e) {
 function onPointerMove(e) {
   const dx = e.clientX - ptStart.x, dy = e.clientY - ptStart.y;
   if (!isDragging && Math.hypot(dx, dy) > 10) isDragging = true;
-  if (isDragging) { dragDX += e.movementX || (e.clientX - ptStart.x - dragDX); dragDY += e.movementY || (e.clientY - ptStart.y - dragDY); }
+  if (isDragging) {
+    dragDX += e.clientX - prevPX;
+    dragDY += e.clientY - prevPY;
+  }
+  prevPX = e.clientX; prevPY = e.clientY;
 }
 
 function onPointerUp(e) {
-  if (!gameRunning) return;
+  if (!gameRunning) { isDragging = false; return; }
   const dx = e.clientX - ptStart.x, dy = e.clientY - ptStart.y;
   const moved = Math.hypot(dx, dy);
   if (moved < 10) {
@@ -225,9 +231,9 @@ function tick(time) {
   const len = Math.hypot(moveX, moveY); if (len > 1) { moveX /= len; moveY /= len; }
   const runKey = has('ShiftLeft') || has('ShiftRight');
 
-  // Camera drag
-  let lDX = 0, lDY = 0;
-  if (isDragging) { lDX = dragDX; lDY = dragDY; dragDX = 0; dragDY = 0; }
+  // Camera drag — consume accumulated delta each frame
+  const lDX = dragDX, lDY = dragDY;
+  dragDX = 0; dragDY = 0;
 
   controller.update(dt, moveX, moveY, runKey, cam.yaw);
   anim?.update(dt, controller.speed);
