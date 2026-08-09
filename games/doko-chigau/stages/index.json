@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "title": "公園のひるさがり",
+    "file": "stages/stage01.json"
+  },
+  {
+    "id": 2,
+    "title": "かわいいキッチン",
+    "file": "stages/stage02.json"
+  },
+  {
+    "id": 3,
+    "title": "うみのたんけん",
+    "file": "stages/stage03.json"
+  }
+]

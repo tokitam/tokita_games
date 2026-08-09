@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 220">
+  <defs>
+    <linearGradient id="ocean3a" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0288D1"/>
+      <stop offset="100%" stop-color="#01579B"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="220" fill="url(#ocean3a)"/>
+  <!-- Sandy bottom -->
+  <ellipse cx="150" cy="220" rx="200" ry="40" fill="#F9A825"/>
+  <rect x="0" y="198" width="300" height="22" fill="#F9A825"/>
+
+  <!-- Seaweed left -->
+  <path d="M30,200 Q20,180 30,160 Q40,140 30,120 Q20,100 30,80" fill="none" stroke="#66BB6A" stroke-width="6" stroke-linecap="round"/>
+  <path d="M45,200 Q55,175 45,150 Q35,125 45,100" fill="none" stroke="#4CAF50" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Seaweed right -->
+  <path d="M270,200 Q260,178 270,155 Q280,132 270,110" fill="none" stroke="#66BB6A" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Coral (red) -->
+  <circle cx="62" cy="197" r="6" fill="#E53935"/>
+  <circle cx="55" cy="190" r="5" fill="#E53935"/>
+  <circle cx="70" cy="189" r="5" fill="#E53935"/>
+  <circle cx="62" cy="183" r="4" fill="#E53935"/>
+  <rect x="60" y="197" width="4" height="10" fill="#E53935"/>
+
+  <!-- Coral right -->
+  <circle cx="230" cy="197" r="5" fill="#FF7043"/>
+  <circle cx="224" cy="191" r="4" fill="#FF7043"/>
+  <circle cx="236" cy="191" r="4" fill="#FF7043"/>
+  <rect x="228" y="197" width="4" height="10" fill="#FF7043"/>
+
+  <!-- Starfish (A: 2 starfish) -->
+  <!-- Starfish 1 -->
+  <g transform="translate(160,188)">
+    <polygon points="0,-12 3,-4 12,-4 5,2 8,10 0,5 -8,10 -5,2 -12,-4 -3,-4" fill="#FF8F00"/>
+  </g>
+  <!-- Starfish 2 -->
+  <g transform="translate(175,192)">
+    <polygon points="0,-9 2,-3 9,-3 4,1 6,7 0,4 -6,7 -4,1 -9,-3 -2,-3" fill="#FFA000"/>
+  </g>
+
+  <!-- Large fish (orange, facing left) -->
+  <ellipse cx="200" cy="100" rx="35" ry="20" fill="#FF7043"/>
+  <polygon points="235,100 255,82 255,118" fill="#FF7043"/>
+  <!-- Fish fin top -->
+  <path d="M195,80 Q210,65 220,80" fill="#FF5722"/>
+  <!-- Eye -->
+  <circle cx="175" cy="96" r="6" fill="#fff"/>
+  <circle cx="174" cy="96" r="3" fill="#333"/>
+  <!-- Mouth -->
+  <path d="M163,102 Q165,106 168,103" fill="none" stroke="#333" stroke-width="1.5"/>
+  <!-- Scales -->
+  <path d="M195,95 Q200,88 205,95" fill="none" stroke="#FF5722" stroke-width="1.5"/>
+  <path d="M205,100 Q210,93 215,100" fill="none" stroke="#FF5722" stroke-width="1.5"/>
+
+  <!-- Small fish (faces left) -->
+  <ellipse cx="80" cy="120" rx="16" ry="9" fill="#FFEB3B"/>
+  <polygon points="96,120 108,113 108,127" fill="#FFEB3B"/>
+  <circle cx="68" cy="117" r="3" fill="#fff"/>
+  <circle cx="67.5" cy="117" r="1.5" fill="#333"/>
+
+  <!-- Bubbles (3 bubbles) -->
+  <circle cx="230" cy="55" r="7" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+  <circle cx="245" cy="42" r="5" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+  <circle cx="255" cy="65" r="4" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+
+  <!-- Light rays -->
+  <line x1="80"  y1="0" x2="60"  y2="80" stroke="rgba(255,255,255,0.08)" stroke-width="18"/>
+  <line x1="150" y1="0" x2="130" y2="80" stroke="rgba(255,255,255,0.06)" stroke-width="14"/>
+  <line x1="220" y1="0" x2="200" y2="80" stroke="rgba(255,255,255,0.08)" stroke-width="18"/>
+</svg>
