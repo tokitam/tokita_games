@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <?php if (file_exists(__DIR__ . '/ga.html')) include __DIR__ . '/ga.html'; ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>トキタゲームズ</title>
@@ -110,63 +111,63 @@
 
   <main class="game-grid">
     <!-- 非表示ゲーム（URL 直打ちでは遊べる）: okataduke-panic / bubble-shooter-3d / jump-and-jump / ponpon-cooking / ponpon-beat -->
-    <a class="game-card" href="./okashi-defense/index.html">
+    <a class="game-card" href="./okashi-defense/index.php">
       <span class="game-emoji">🍬</span>
       <span class="game-name">お菓子ディフェンス</span>
     </a>
-    <a class="game-card" href="./stack-3d/index.html">
+    <a class="game-card" href="./stack-3d/index.php">
       <span class="game-emoji">📦</span>
       <span class="game-name">スタック3D</span>
     </a>
-    <a class="game-card" href="./korokoro-maze/index.html">
+    <a class="game-card" href="./korokoro-maze/index.php">
       <span class="game-emoji">🔮</span>
       <span class="game-name">ころころ迷路</span>
     </a>
-    <a class="game-card" href="./koma-battle/index.html">
+    <a class="game-card" href="./koma-battle/index.php">
       <span class="game-emoji">🌀</span>
       <span class="game-name">くるくるコマ対決</span>
     </a>
-    <a class="game-card" href="./fishing-friends/index.html">
+    <a class="game-card" href="./fishing-friends/index.php">
       <span class="game-emoji">🎣</span>
       <span class="game-name">フィッシングフレンズ</span>
     </a>
-    <a class="game-card" href="./slime-bowling/index.html">
+    <a class="game-card" href="./slime-bowling/index.php">
       <span class="game-emoji">🎳</span>
       <span class="game-name">スライムボウリング</span>
     </a>
-    <a class="game-card" href="./colorful-crash/index.html">
+    <a class="game-card" href="./colorful-crash/index.php">
       <span class="game-emoji">💥</span>
       <span class="game-name">カラフルクラッシュ</span>
     </a>
-    <a class="game-card" href="./iro-touch/index.html">
+    <a class="game-card" href="./iro-touch/index.php">
       <span class="game-emoji">🎨</span>
       <span class="game-name">いろタッチ</span>
     </a>
-    <a class="game-card" href="./doko-chigau/index.html">
+    <a class="game-card" href="./doko-chigau/index.php">
       <span class="game-emoji">🔍</span>
       <span class="game-name">どこちがう？</span>
     </a>
-    <a class="game-card" href="./fruit-poton/index.html">
+    <a class="game-card" href="./fruit-poton/index.php">
       <span class="game-emoji">🍎</span>
       <span class="game-name">フルーツぽとん</span>
     </a>
-    <a class="game-card" href="./pyonpyon-bird/index.html">
+    <a class="game-card" href="./pyonpyon-bird/index.php">
       <span class="game-emoji">🐦</span>
       <span class="game-name">ぴょんぴょんバード</span>
     </a>
-    <a class="game-card" href="./slime-merge/index.html">
+    <a class="game-card" href="./slime-merge/index.php">
       <span class="game-emoji">🟢</span>
       <span class="game-name">くっつきスライム</span>
     </a>
-    <a class="game-card" href="./pair-animals/index.html">
+    <a class="game-card" href="./pair-animals/index.php">
       <span class="game-emoji">🐾</span>
       <span class="game-name">ペアペアどうぶつ</span>
     </a>
-    <a class="game-card" href="./mogpon/index.html">
+    <a class="game-card" href="./mogpon/index.php">
       <span class="game-emoji">🐹</span>
       <span class="game-name">モグポン！</span>
     </a>
-    <a class="game-card" href="./poipoi-block/index.html">
+    <a class="game-card" href="./poipoi-block/index.php">
       <span class="game-emoji">🟪</span>
       <span class="game-name">ポイポイブロック</span>
     </a>
