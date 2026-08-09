@@ -37,6 +37,7 @@ let goalMarker = null;
 // ── Pointer input ─────────────────────────────────────────────────────────────
 const ptStart = { x: 0, y: 0, t: 0 };
 let lastTapTime = 0;
+let isPointerDown = false;
 let isDragging = false;
 let dragDX = 0, dragDY = 0;
 let prevPX = 0, prevPY = 0;
@@ -178,11 +179,13 @@ function screenToGround(clientX, clientY) {
 function onPointerDown(e) {
   ptStart.x = e.clientX; ptStart.y = e.clientY; ptStart.t = performance.now();
   prevPX = e.clientX; prevPY = e.clientY;
+  isPointerDown = true;
   isDragging = false; dragDX = 0; dragDY = 0;
   renderer.domElement.setPointerCapture(e.pointerId);
 }
 
 function onPointerMove(e) {
+  if (!isPointerDown) { prevPX = e.clientX; prevPY = e.clientY; return; }
   const dx = e.clientX - ptStart.x, dy = e.clientY - ptStart.y;
   if (!isDragging && Math.hypot(dx, dy) > 10) isDragging = true;
   if (isDragging) {
@@ -193,6 +196,7 @@ function onPointerMove(e) {
 }
 
 function onPointerUp(e) {
+  isPointerDown = false;
   if (!gameRunning) { isDragging = false; return; }
   const dx = e.clientX - ptStart.x, dy = e.clientY - ptStart.y;
   const moved = Math.hypot(dx, dy);
