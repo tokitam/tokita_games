@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <script src="../ga.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>フォトスポットめぐり</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<div id="canvas-wrap"></div>
+
+<!-- Flash overlay -->
+<div id="flash-overlay"></div>
+
+<!-- Finder frame (always shown during HUD) -->
+<div id="finder-frame"></div>
+
+<!-- Title Screen -->
+<div id="screen-title" class="screen">
+  <div class="title-logo">📸 フォトスポット<br>めぐり</div>
+  <p class="title-sub">街のランドマークを探してシャッターを切ろう！<br>いい構図で撮るほど高評価 ★★★</p>
+
+  <div class="mode-grid">
+    <div class="mode-card" id="btn-daily">
+      <span class="mode-icon">🗓️</span>
+      <div class="mode-title">きょうの街</div>
+      <div class="mode-best">ベスト: <span id="title-daily-best">--:--</span></div>
+    </div>
+    <div class="mode-card" id="btn-random">
+      <span class="mode-icon">🎲</span>
+      <div class="mode-title">ランダム</div>
+      <div class="mode-best">ベスト: <span id="title-rand-best">--:--</span></div>
+    </div>
+  </div>
+
+  <p class="hint">
+    スマホ: タップで移動 / ドラッグでカメラ回転<br>
+    PC: WASD / 矢印キー ／ ドラッグでカメラ回転<br>
+    右下の 📷 ボタンでシャッター！
+  </p>
+</div>
+
+<!-- HUD -->
+<div id="screen-hud" class="screen hidden">
+  <div class="hud-bar">
+    <span class="hud-stat" id="hud-time">⏱ 0:00</span>
+  </div>
+  <!-- Mission chips -->
+  <div id="mission-bar"></div>
+</div>
+
+<!-- Shutter button -->
+<button id="shutter-btn" aria-label="シャッター">📷</button>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Result Screen -->
+<div id="screen-result" class="screen hidden">
+  <div class="result-title" id="result-complete" style="display:none">🎉 全スポット★3！</div>
+  <div class="result-title" id="result-incomplete" style="display:none">📷 撮影記録</div>
+  <div class="result-card">
+    <div class="result-stars" id="result-stars">0/15 ★</div>
+    <div class="result-meta">タイム: <span id="result-time">0:00</span></div>
+    <div class="result-bestrow">全★3 ベスト: <span id="result-best">--:--</span></div>
+  </div>
+  <div class="result-newbest hidden" id="result-newbest">🏆 ベスト更新！</div>
+  <div class="btn-stack">
+    <button class="btn-primary" id="btn-retry">もういちど！</button>
+    <div class="btn-row">
+      <button class="btn-secondary" id="btn-daily2">きょうの街</button>
+      <button class="btn-secondary" id="btn-random2">ランダム</button>
+    </div>
+    <button class="btn-secondary" id="btn-title2">タイトルへ</button>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
