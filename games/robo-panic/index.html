@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <script src="../ga.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>にげろ！ロボそうじ機パニック</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<div id="canvas-wrap"></div>
+
+<!-- Warning glow overlay (red when robots near) -->
+<div id="screen-glow"></div>
+
+<!-- Title Screen -->
+<div id="screen-title" class="screen">
+  <div class="title-logo">🤖 にげろ！<br>ロボそうじ機パニック</div>
+  <p class="title-sub">ロボット掃除機の群れから逃げながら<br>コインを集めよう！捕まるまで何点とれる？</p>
+
+  <div class="title-best-box">
+    <span class="title-best-label">ベストスコア</span>
+    <span class="title-best-val" id="title-best">---</span>
+  </div>
+
+  <div class="mode-grid-single">
+    <div class="mode-card" id="btn-start">
+      <span class="mode-icon">▶️</span>
+      <div class="mode-title">スタート！</div>
+    </div>
+  </div>
+
+  <p class="hint">
+    スマホ: タップで移動 / ドラッグでカメラ回転<br>
+    PC: WASD / 矢印キー ／ ドラッグでカメラ回転<br>
+    コイン +10pt ／ 生存秒数も加算！
+  </p>
+</div>
+
+<!-- HUD -->
+<div id="screen-hud" class="screen hidden">
+  <div class="hud-bar">
+    <span class="hud-stat" id="hud-score">🪙 0</span>
+    <span class="hud-stat" id="hud-time">⏱ 0:00</span>
+    <span class="hud-stat hud-wave" id="hud-wave">Wave 1</span>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Result Screen -->
+<div id="screen-result" class="screen hidden">
+  <div class="result-title">🤖 捕まった！</div>
+  <div class="result-card">
+    <div class="result-score-big" id="result-score">0</div>
+    <div class="result-breakdown">
+      コイン <span id="result-coin-pts">0</span>pt
+      ＋ 生存 <span id="result-surv-pts">0</span>pt
+    </div>
+    <div class="result-meta">
+      生存時間: <span id="result-time">0:00</span>
+      ／ Wave <span id="result-wave">1</span>
+    </div>
+    <div class="result-bestrow">ベスト: <span id="result-best">0</span>pt</div>
+  </div>
+  <div class="result-newbest hidden" id="result-newbest">🏆 ベスト更新！</div>
+  <div class="btn-stack">
+    <button class="btn-primary" id="btn-retry">もういちど！</button>
+    <button class="btn-secondary" id="btn-title2">タイトルへ</button>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
