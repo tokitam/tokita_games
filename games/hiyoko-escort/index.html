@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <script src="../ga.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>まいごのひよこエスコート</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.185.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<div id="canvas-wrap"></div>
+
+<!-- Title Screen -->
+<div id="screen-title" class="screen">
+  <div class="title-logo">🐤 まいごの<br>ひよこエスコート</div>
+  <p class="title-sub">迷子のひよこを光る巣まで送り届けよう！<br>たくさん一緒に届けるほど高得点だよ🐣</p>
+
+  <div class="mode-grid">
+    <div class="mode-card" id="btn-daily">
+      <span class="mode-icon">🗓️</span>
+      <div class="mode-title">きょうの街</div>
+      <div class="mode-best">ベスト: <span id="title-daily-best">---</span></div>
+    </div>
+    <div class="mode-card" id="btn-random">
+      <span class="mode-icon">🎲</span>
+      <div class="mode-title">ランダム</div>
+      <div class="mode-best">ベスト: <span id="title-rand-best">---</span></div>
+    </div>
+  </div>
+
+  <p class="hint">
+    近づくとピヨピヨ聞こえるよ 🐤<br>
+    走るとはぐれることがあるよ！<br>
+    スマホ: タップで移動 / ドラッグでカメラ回転
+  </p>
+</div>
+
+<!-- Minimap -->
+<canvas id="minimap" width="110" height="110" class="hidden"></canvas>
+
+<!-- HUD -->
+<div id="screen-hud" class="screen hidden">
+  <div class="hud-bar">
+    <span class="hud-stat" id="hud-delivered">🐣 0/8</span>
+    <span class="hud-stat" id="hud-following">🐤×0</span>
+    <span class="hud-stat" id="hud-time">⏱ 0:00</span>
+  </div>
+</div>
+
+<!-- Nest direction indicator (show when following > 0) -->
+<div id="nest-indicator" class="hidden">
+  <div class="nest-arrow-ring">
+    <svg id="nest-arrow-icon" viewBox="0 0 20 30" width="22" height="22" style="display:block">
+      <polygon points="10,1 19,29 10,21 1,29" fill="currentColor"/>
+    </svg>
+  </div>
+  <div id="nest-dist-text"></div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Result Screen -->
+<div id="screen-result" class="screen hidden">
+  <div class="result-title">🎉 全員とどけた！</div>
+  <div class="result-card">
+    <div class="result-score-big" id="result-score">0</div>
+    <div class="result-meta">タイム: <span id="result-time">0:00</span></div>
+    <div class="result-bestrow">ベスト: <span id="result-best">0</span>pt</div>
+  </div>
+  <div class="result-newbest hidden" id="result-newbest">🏆 ベスト更新！</div>
+  <div class="btn-stack">
+    <button class="btn-primary" id="btn-retry">もういちど！</button>
+    <div class="btn-row">
+      <button class="btn-secondary" id="btn-daily2">きょうの街</button>
+      <button class="btn-secondary" id="btn-random2">ランダム</button>
+    </div>
+    <button class="btn-secondary" id="btn-title2">タイトルへ</button>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
