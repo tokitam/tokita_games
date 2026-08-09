@@ -1,12 +1,12 @@
 (function() {
   var HS_KEY = 'pyonpyon-bird.highscore';
-  var GRAVITY = 0.28;
-  var FLAP_VY = -6;
+  var GRAVITY = 0.20;
+  var FLAP_VY = -5.2;
   var PIPE_WIDTH = 60;
-  var BASE_SPEED = 2.0;
-  var BASE_GAP = 190;
-  var MIN_GAP = 150;
-  var PIPE_INTERVAL = 110; // frames
+  var BASE_SPEED = 1.6;
+  var BASE_GAP = 220;
+  var MIN_GAP = 175;
+  var PIPE_INTERVAL = 130; // frames
 
   var canvas, ctx, W, H, DPR;
   var status, bird, pipes, score, best, frame, speed, gapSize;
@@ -115,8 +115,8 @@
     frame++;
 
     // Difficulty scaling
-    if (frame % 900 === 0) speed = Math.min(speed + 0.3, 4.5);
-    if (frame % 1800 === 0) gapSize = Math.max(gapSize - 4, MIN_GAP);
+    if (frame % 1200 === 0) speed = Math.min(speed + 0.3, 3.8);
+    if (frame % 2400 === 0) gapSize = Math.max(gapSize - 3, MIN_GAP);
 
     // Bird physics
     bird.vy += GRAVITY;
