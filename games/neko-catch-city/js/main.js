@@ -26,6 +26,17 @@ function todayKey() {
   return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
 }
 
+// ── Character list (CC0 / Quaternius) ────────────────────────────────────────
+const CHARACTERS = [
+  { id: 'default', label: 'デフォルト',   emoji: '🧍', file: './models/character.glb'  },
+  { id: 'girl',    label: '女の子',       emoji: '👧', file: './models/char_girl.glb'   },
+  { id: 'man',     label: '青年',         emoji: '🧑', file: './models/char_man.glb'    },
+  { id: 'agent',   label: 'エージェント', emoji: '🕵️', file: './models/char_agent.glb'  },
+  { id: 'teen',    label: 'こども',       emoji: '🧒', file: './models/char_teen.glb'   },
+  { id: 'costume', label: 'コスチューム', emoji: '🧙', file: './models/char_costume.glb'},
+];
+let selectedCharId = localStorage.getItem('neko-catch-city.char') || 'default';
+
 // ── Game state ────────────────────────────────────────────────────────────────
 let renderer, scene, env, world, controller, anim, cam, catManager;
 let lastTime = null, gameMode = null, gameSeed = null;
@@ -91,6 +102,22 @@ function setupTitle() {
 
   el('btn-daily').onclick  = () => startGame('daily',  todaySeed());
   el('btn-random').onclick = () => startGame('random', randomSeed());
+
+  // キャラ選択
+  const grid = el('char-grid');
+  grid.innerHTML = '';
+  for (const ch of CHARACTERS) {
+    const card = document.createElement('div');
+    card.className = 'char-card' + (ch.id === selectedCharId ? ' selected' : '');
+    card.innerHTML = `<span class="char-emoji">${ch.emoji}</span><span class="char-label">${ch.label}</span>`;
+    card.onclick = () => {
+      selectedCharId = ch.id;
+      localStorage.setItem('neko-catch-city.char', ch.id);
+      grid.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    };
+    grid.appendChild(card);
+  }
 }
 
 // ── Game startup ──────────────────────────────────────────────────────────────
@@ -359,8 +386,9 @@ function attachPlaceholder() {
 }
 
 async function loadCharacter() {
+  const ch = CHARACTERS.find(c => c.id === selectedCharId) || CHARACTERS[0];
   try {
-    const gltf = await new GLTFLoader().loadAsync('./models/character.glb');
+    const gltf = await new GLTFLoader().loadAsync(ch.file);
     const model = gltf.scene;
     const box = new THREE.Box3().setFromObject(model);
     const height = box.max.y - box.min.y;
