@@ -417,6 +417,17 @@
   };
 
   let lastTap = 0;
+
+  // Overlays sit above canvas (z-index 30), so they swallow taps — add direct listeners
+  ['overlay-title', 'overlay-clear', 'overlay-gameover'].forEach(id => {
+    document.getElementById(id).addEventListener('pointerdown', () => {
+      const now = Date.now();
+      if (now - lastTap < 120) return;
+      lastTap = now;
+      startGame();
+    });
+  });
+
   canvas.addEventListener('pointerdown', e => {
     const now = Date.now();
     if (now - lastTap < 120) return;
