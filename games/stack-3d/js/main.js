@@ -228,6 +228,10 @@
   canvas.addEventListener('pointerdown', onTap);
   document.addEventListener('keydown', e => { if (e.code === 'Space' || e.code === 'Enter') onTap(); });
 
+  // 全画面オーバーレイはタップを吸収するため個別にリスナーを登録
+  document.getElementById('overlay-title').addEventListener('pointerdown', onTap);
+  document.getElementById('overlay-gameover').addEventListener('pointerdown', onTap);
+
   // Render loop
   const AMP = 5;
 
