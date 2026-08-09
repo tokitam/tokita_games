@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>お片付けパニック</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <canvas id="renderCanvas"></canvas>
+
+  <!-- Title -->
+  <div id="overlay-title" class="overlay">
+    <div class="overlay-inner">
+      <div class="big-emoji">🧸</div>
+      <div class="ov-title">お片付けパニック</div>
+      <div class="ov-sub">おもちゃを色合わせで片付けよう！</div>
+      <div class="ov-hint">タップでスタート</div>
+    </div>
+  </div>
+
+  <!-- Gameover -->
+  <div id="overlay-gameover" class="overlay hidden">
+    <div class="overlay-inner">
+      <div class="big-emoji" id="go-emoji">⏰</div>
+      <div class="ov-title" id="go-title">タイムアップ！</div>
+      <div class="ov-score">スコア: <span id="go-score">0</span></div>
+      <div class="ov-best">ベスト: <span id="go-best">0</span></div>
+      <div class="ov-hint">タップでリスタート</div>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div class="hud-row">
+      <span class="hud-item">⏱ <span id="timer">60</span>秒</span>
+      <span class="hud-item">📦 <span id="stored">0</span>/15</span>
+      <span class="hud-item">⭐ <span id="score-el">0</span></span>
+    </div>
+  </div>
+
+  <!-- Combo message -->
+  <div id="combo-msg" class="combo-msg hidden"></div>
+
+  <!-- Store flash -->
+  <div id="store-flash" class="store-flash hidden"></div>
+
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cannon@0.6.2/build/cannon.min.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
