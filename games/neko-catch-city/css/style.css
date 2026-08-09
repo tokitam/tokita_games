@@ -166,6 +166,49 @@ html, body {
   text-shadow: 0 1px 4px rgba(0,0,0,0.7);
 }
 
+/* ── Cat indicator ─────────────────────────── */
+#cat-indicator {
+  position: fixed;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+#cat-indicator.hidden { opacity: 0; pointer-events: none; }
+
+.cat-arrow-ring {
+  width: 46px;
+  height: 46px;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+#cat-arrow-icon {
+  font-size: 1.4rem;
+  display: inline-block;
+  line-height: 1;
+  transition: transform 0.08s linear;
+}
+
+#cat-dist-text {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
 /* ── Toast ─────────────────────────────────── */
 #toast {
   position: fixed;

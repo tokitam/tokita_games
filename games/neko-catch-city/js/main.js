@@ -247,6 +247,38 @@ function onPointerUp(e) {
   isDragging = false;
 }
 
+// ── Cat direction indicator ───────────────────────────────────────────────────
+function updateCatIndicator() {
+  const wrap = el('cat-indicator');
+  if (!gameRunning || !catManager || !cam) { wrap.classList.add('hidden'); return; }
+
+  let nearest = null, nearestDist = Infinity;
+  for (const cat of catManager.cats) {
+    if (cat.state === 'caught') continue;
+    const dx = cat.root.position.x - controller.position.x;
+    const dz = cat.root.position.z - controller.position.z;
+    const d = Math.hypot(dx, dz);
+    if (d < nearestDist) { nearestDist = d; nearest = { cat, dx, dz }; }
+  }
+
+  if (!nearest) { wrap.classList.add('hidden'); return; }
+  wrap.classList.remove('hidden');
+
+  const { dx, dz, cat } = nearest;
+  const yaw = cam.yaw;
+  const sRight = dx * Math.cos(yaw) - dz * Math.sin(yaw);
+  const sUp    = -dx * Math.sin(yaw) - dz * Math.cos(yaw);
+  const angle  = Math.atan2(sRight, sUp);
+
+  const icon = el('cat-arrow-icon');
+  icon.style.transform = `rotate(${angle}rad)`;
+  icon.style.color = cat.isGolden ? '#ffd700' : '#ff6b9d';
+
+  const distEl = el('cat-dist-text');
+  distEl.textContent = Math.round(nearestDist) + 'm';
+  distEl.style.color = cat.isGolden ? '#ffd700' : 'rgba(255,255,255,0.8)';
+}
+
 // ── Minimap ───────────────────────────────────────────────────────────────────
 let _mmCtx = null;
 function getMinimapCtx() {
@@ -352,6 +384,7 @@ function tick(time) {
 
   renderer.render(scene, cam.camera);
   drawMinimap();
+  updateCatIndicator();
 }
 
 // ── End game ──────────────────────────────────────────────────────────────────
@@ -370,9 +403,10 @@ function endGame() {
   el('btn-retry').onclick  = () => startGame(gameMode, gameSeed);
   el('btn-daily2').onclick = () => startGame('daily',  todaySeed());
   el('btn-random2').onclick = () => startGame('random', randomSeed());
-  el('btn-title2').onclick = () => { el('minimap').classList.add('hidden'); showScreen('title'); setupTitle(); };
+  el('btn-title2').onclick = () => { el('minimap').classList.add('hidden'); el('cat-indicator').classList.add('hidden'); showScreen('title'); setupTitle(); };
 
   el('minimap').classList.add('hidden');
+  el('cat-indicator').classList.add('hidden');
   showScreen('result');
 }
 
