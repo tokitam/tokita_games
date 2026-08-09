@@ -40,7 +40,12 @@
       onTap(t.clientX, t.clientY);
     }, { passive: false });
     el('btn-retry').addEventListener('click', function() { hideOverlay(); startGame(); });
-    el('btn-title').addEventListener('click', function() { hideOverlay(); status = 'waiting'; });
+    el('btn-title').addEventListener('click', function() {
+      hideOverlay();
+      pipes = [];
+      bird = { x: W * 0.25, y: H * 0.45, vy: 0, rotation: 0 };
+      status = 'waiting';
+    });
 
     clouds = [
       { x: 0.1, y: 0.12, w: 0.18 },
@@ -48,6 +53,10 @@
       { x: 0.7, y: 0.15, w: 0.20 },
       { x: 0.9, y: 0.08, w: 0.12 }
     ];
+
+    // Initialize so drawPipes/drawBird don't throw before drawTitle() is reached
+    pipes = [];
+    bird = { x: W * 0.25, y: H * 0.45, vy: 0, rotation: 0 };
 
     status = 'waiting';
     requestAnimationFrame(loop);
