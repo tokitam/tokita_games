@@ -221,6 +221,31 @@ function startGameLoop() {
   scene.registerBeforeRender(gameLoopHandle);
 }
 
+// 難易度管理
+let currentDifficulty = 'ふつう';
+
+function hsKey(diffName) {
+  return 'jump-and-jump.hs.' + (diffName || currentDifficulty);
+}
+
+function getHighscore(diffName) {
+  const key = hsKey(diffName);
+  const saved = localStorage.getItem(key);
+  if (saved !== null) return parseInt(saved, 10);
+  // ふつうのみ旧キーからフォールバック
+  if ((diffName || currentDifficulty) === 'ふつう') {
+    return parseInt(localStorage.getItem('jump-and-jump.highscore') || '0', 10);
+  }
+  return 0;
+}
+
+function saveHighscore(score, diffName) {
+  const prev = getHighscore(diffName);
+  const best = Math.max(score, prev);
+  localStorage.setItem(hsKey(diffName), best);
+  return best;
+}
+
 function startGame() {
   camTargetY = 4;
   camera.position.y = 4;
@@ -228,11 +253,11 @@ function startGame() {
   rightActive = false;
   JumpGame.setInput(0);
 
-  // 既存の足場メッシュを全削除
   platMeshMap.forEach(m => m.dispose());
   platMeshMap.clear();
   if (starPS && starPS._started) { starPS.stop(); starPS._started = false; }
 
+  const diff = JumpGame.DIFFICULTIES[currentDifficulty];
   JumpGame.init({
     onPlatformCreate(p)  { makePlatMesh(p); },
     onPlatformRemove(p)  { removePlatMesh(p); },
@@ -249,48 +274,56 @@ function startGame() {
     onDie(s)             {
       setTimeout(() => showGameover(s), 600);
     }
-  });
+  }, diff);
 
+  document.getElementById('best').textContent = getHighscore();
   setupInput();
   startGameLoop();
 }
 
 function showGameover(score) {
-  const prev = parseInt(localStorage.getItem('jump-and-jump.highscore') || '0');
-  const best = Math.max(score, prev);
-  localStorage.setItem('jump-and-jump.highscore', best);
+  const best = saveHighscore(score);
   document.getElementById('go-score').textContent = score;
   document.getElementById('go-best').textContent = best;
   document.getElementById('screen-game').classList.add('hidden');
   document.getElementById('screen-gameover').classList.remove('hidden');
 }
 
+function buildDiffButtons() {
+  const wrap = document.getElementById('diff-buttons');
+  wrap.innerHTML = '';
+  Object.entries(JumpGame.DIFFICULTIES).forEach(([name, def]) => {
+    const btn = document.createElement('button');
+    btn.className = 'diff-btn';
+    btn.style.background = `linear-gradient(135deg, ${def.color}cc, ${def.color})`;
+    const best = getHighscore(name);
+    btn.innerHTML =
+      `<span class="diff-btn-name">${name}</span>` +
+      `<span class="diff-btn-best">ベスト: ${best}</span>`;
+    btn.addEventListener('click', () => {
+      currentDifficulty = name;
+      document.getElementById('screen-title').classList.add('hidden');
+      document.getElementById('screen-game').classList.remove('hidden');
+      initScene();
+      startGame();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
 // 画面遷移
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('title-best').textContent =
-    localStorage.getItem('jump-and-jump.highscore') || '0';
-
-  document.getElementById('btn-start').addEventListener('click', () => {
-    document.getElementById('screen-title').classList.add('hidden');
-    document.getElementById('screen-game').classList.remove('hidden');
-    initScene();
-    document.getElementById('best').textContent =
-      localStorage.getItem('jump-and-jump.highscore') || '0';
-    startGame();
-  });
+  buildDiffButtons();
 
   document.getElementById('btn-retry').addEventListener('click', () => {
     document.getElementById('screen-gameover').classList.add('hidden');
     document.getElementById('screen-game').classList.remove('hidden');
-    document.getElementById('best').textContent =
-      localStorage.getItem('jump-and-jump.highscore') || '0';
     startGame();
   });
 
   document.getElementById('btn-title').addEventListener('click', () => {
     document.getElementById('screen-gameover').classList.add('hidden');
     document.getElementById('screen-title').classList.remove('hidden');
-    document.getElementById('title-best').textContent =
-      localStorage.getItem('jump-and-jump.highscore') || '0';
+    buildDiffButtons(); // refresh best scores
   });
 });

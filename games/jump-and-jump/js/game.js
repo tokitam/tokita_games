@@ -1,17 +1,30 @@
 // ジャンプとジャンプ — キャラクター物理・足場生成・スコア
 
 const JumpGame = (() => {
-  // 物理定数
-  const GRAVITY    = 0.012;
+  // 難易度定義
+  const DIFFICULTIES = {
+    'ちょうかんたん': { gravity: 0.010, baseSpacing: 2.0, maxSpacing: 2.6, platHalf: 1.05, moveStart: 80,  cloudStart: 150, moveSpeed: 0.008, color: '#64B5F6', label: 'ちょうかんたん' },
+    'かんたん':       { gravity: 0.011, baseSpacing: 2.1, maxSpacing: 2.9, platHalf: 0.95, moveStart: 60,  cloudStart: 120, moveSpeed: 0.010, color: '#81C784', label: 'かんたん' },
+    'ふつう':         { gravity: 0.012, baseSpacing: 2.2, maxSpacing: 3.2, platHalf: 0.85, moveStart: 50,  cloudStart: 100, moveSpeed: 0.012, color: '#FFD54F', label: 'ふつう' },
+    'むずい':         { gravity: 0.014, baseSpacing: 2.4, maxSpacing: 3.5, platHalf: 0.70, moveStart: 30,  cloudStart: 60,  moveSpeed: 0.016, color: '#EF5350', label: 'むずい' },
+  };
+
+  // 物理定数（難易度で上書き）
   const JUMP_VY    = 0.32;
   const SPRING_VY  = JUMP_VY * 2.2;
   const MOVE_VX    = 0.09;
-  const WRAP_X     = 4.0;  // ±この値で反対側ワープ
-  const LAND_THR   = 0.15; // 着地判定しきい値
-  const PLAT_HALF  = 0.85; // 足場の半幅（X距離）
-  const AHEAD_COUNT = 15;  // 先行生成枚数
-  const BASE_SPACING = 2.2;
-  const MAX_SPACING  = 3.2;
+  const WRAP_X     = 4.0;
+  const LAND_THR   = 0.15;
+  const AHEAD_COUNT = 15;
+
+  // 難易度パラメータ（実行時に設定）
+  let GRAVITY     = 0.012;
+  let PLAT_HALF   = 0.85;
+  let BASE_SPACING = 2.2;
+  let MAX_SPACING  = 3.2;
+  let MOVE_START   = 50;
+  let CLOUD_START  = 100;
+  let MOVE_SPEED   = 0.012;
 
   // キャラクター状態
   const char = { x: 0, y: 0, vy: JUMP_VY };
@@ -29,8 +42,8 @@ const JumpGame = (() => {
   function pickType(height) {
     const r = Math.random();
     if (r < 0.08) return 'spring';
-    if (height >= 100 && r < 0.22) return 'cloud';
-    if (height >= 50  && r < 0.4)  return 'moving';
+    if (height >= CLOUD_START && r < 0.22) return 'cloud';
+    if (height >= MOVE_START  && r < 0.4)  return 'moving';
     return 'normal';
   }
 
@@ -39,8 +52,17 @@ const JumpGame = (() => {
     return BASE_SPACING + (MAX_SPACING - BASE_SPACING) * t;
   }
 
-  function init(cbs) {
+  function init(cbs, diff) {
     callbacks = cbs;
+    if (diff) {
+      GRAVITY      = diff.gravity;
+      PLAT_HALF    = diff.platHalf;
+      BASE_SPACING = diff.baseSpacing;
+      MAX_SPACING  = diff.maxSpacing;
+      MOVE_START   = diff.moveStart;
+      CLOUD_START  = diff.cloudStart;
+      MOVE_SPEED   = diff.moveSpeed;
+    }
     score = 0;
     highestY = 0;
     alive = true;
@@ -61,7 +83,7 @@ const JumpGame = (() => {
     const x = (Math.random() - 0.5) * xRange * 2;
     nextPlatY += spacing(y);
 
-    const p = { x, y, z: zOff, type, mesh: null, used: false, moveDir: 1, moveSpeed: 0.012 };
+    const p = { x, y, z: zOff, type, mesh: null, used: false, moveDir: 1, moveSpeed: MOVE_SPEED };
     platforms.push(p);
     if (callbacks.onPlatformCreate) callbacks.onPlatformCreate(p);
     return p;
@@ -161,5 +183,5 @@ const JumpGame = (() => {
   function isAlive() { return alive; }
   function getScore() { return score; }
 
-  return { init, update, setInput, getChar, isAlive, getScore };
+  return { init, update, setInput, getChar, isAlive, getScore, DIFFICULTIES };
 })();
