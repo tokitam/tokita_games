@@ -28,12 +28,12 @@ function todayKey() {
 
 // ── Character list (CC0 / Quaternius) ────────────────────────────────────────
 const CHARACTERS = [
-  { id: 'default', label: 'デフォルト',   emoji: '🧍', file: './models/character.glb'   },
-  { id: 'girl',    label: '冒険者',       emoji: '🗡️', file: './models/char_girl.glb'   },
-  { id: 'woman',   label: 'カジュアル',   emoji: '👩', file: './models/char_woman.glb'  },
-  { id: 'man',     label: '青年',         emoji: '🧑', file: './models/char_man.glb'    },
-  { id: 'agent',   label: 'エージェント', emoji: '🕵️', file: './models/char_agent.glb'  },
-  { id: 'costume', label: 'コスチューム', emoji: '🧙', file: './models/char_costume.glb'},
+  { id: 'default', label: 'デフォルト',   emoji: '🧍', file: './models/character.glb',   rotY: Math.PI },
+  { id: 'girl',    label: '冒険者',       emoji: '🗡️', file: './models/char_girl.glb',   rotY: 0 },
+  { id: 'woman',   label: 'カジュアル',   emoji: '👩', file: './models/char_woman.glb',  rotY: 0 },
+  { id: 'man',     label: '青年',         emoji: '🧑', file: './models/char_man.glb',    rotY: 0 },
+  { id: 'agent',   label: 'エージェント', emoji: '🕵️', file: './models/char_agent.glb',  rotY: 0 },
+  { id: 'costume', label: 'コスチューム', emoji: '🧙', file: './models/char_costume.glb', rotY: 0 },
 ];
 let selectedCharId = localStorage.getItem('neko-catch-city.char') || 'default';
 
@@ -393,7 +393,7 @@ async function loadCharacter() {
     const box = new THREE.Box3().setFromObject(model);
     const height = box.max.y - box.min.y;
     const wrapper = new THREE.Group();
-    wrapper.rotation.y = Math.PI;
+    wrapper.rotation.y = ch.rotY ?? Math.PI;
     wrapper.scale.setScalar(height > 0.01 ? CONFIG.charHeight / height : 1);
     wrapper.add(model);
     model.traverse(o => { if (o.isMesh) { o.castShadow = true; o.frustumCulled = false; } });
