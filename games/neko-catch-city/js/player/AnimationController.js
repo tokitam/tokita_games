@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
-const WALK_ON = 0.15, WALK_OFF = 0.05, RUN_ON = 3.7, RUN_OFF = 3.3, FADE = 0.25;
-const WALK_CLIP_SPEED = 2.0, RUN_CLIP_SPEED = 5.5;
+const MOVE_ON = 0.15, MOVE_OFF = 0.05, FADE = 0.25;
+const RUN_CLIP_SPEED = 5.5;
 
 export class AnimationController {
   constructor(root, clips) {
@@ -27,17 +27,15 @@ export class AnimationController {
 
   update(dt, speed) {
     let next = this._state;
-    if (this._state === 'idle') { if (speed > WALK_ON) next = 'walk'; }
-    else if (this._state === 'walk') { if (speed < WALK_OFF) next = 'idle'; else if (speed > RUN_ON) next = 'run'; }
-    else { if (speed < RUN_OFF) next = 'walk'; }
+    if (this._state === 'idle') { if (speed > MOVE_ON) next = 'run'; }
+    else { if (speed < MOVE_OFF) next = 'idle'; }
 
     if (next !== this._state) {
       const from = this._actions[this._state], to = this._actions[next];
       to.enabled = true; to.setEffectiveTimeScale(1); to.setEffectiveWeight(1); to.time = 0;
       from.crossFadeTo(to, FADE, false); this._state = next;
     }
-    if (this._state === 'walk') this._actions.walk.setEffectiveTimeScale(THREE.MathUtils.clamp(speed / WALK_CLIP_SPEED, 0.6, 1.8));
-    else if (this._state === 'run') this._actions.run.setEffectiveTimeScale(THREE.MathUtils.clamp(speed / RUN_CLIP_SPEED, 0.7, 1.4));
+    if (this._state === 'run') this._actions.run.setEffectiveTimeScale(THREE.MathUtils.clamp(speed / RUN_CLIP_SPEED, 0.7, 1.4));
     this._mixer.update(dt);
   }
 }

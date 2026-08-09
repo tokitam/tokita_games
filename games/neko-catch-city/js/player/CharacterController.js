@@ -42,7 +42,7 @@ export class CharacterController {
     const len = Math.hypot(dirX, dirZ);
     let targetVX = 0, targetVZ = 0;
     if (len > 1e-4) {
-      const sp = (isRunning ? CONFIG.runSpeed : CONFIG.walkSpeed) * Math.min(len, 1);
+      const sp = CONFIG.runSpeed * Math.min(len, 1);
       targetVX = (dirX / len) * sp; targetVZ = (dirZ / len) * sp;
     }
 
