@@ -29,7 +29,7 @@ var Stage = (function() {
     return state;
   }
 
-  function checkTap(normX, normY) {
+  function checkTap(normX, normY, minR) {
     // normX, normY: 0.0~1.0 in viewBox space
     var vw = currentStage.viewBox.w;
     var vh = currentStage.viewBox.h;
@@ -41,7 +41,8 @@ var Stage = (function() {
       var d = currentStage.differences[i];
       var dx = svgX - d.x;
       var dy = svgY - d.y;
-      if (Math.sqrt(dx*dx + dy*dy) <= d.r) {
+      var r  = (minR !== undefined) ? Math.max(d.r, minR) : d.r;
+      if (Math.sqrt(dx*dx + dy*dy) <= r) {
         state.found.push(i);
         if (state.found.length === state.total) {
           state.elapsed = Math.round((Date.now() - state.startTime) / 1000);
