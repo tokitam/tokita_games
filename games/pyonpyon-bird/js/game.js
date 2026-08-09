@@ -1,22 +1,31 @@
 (function() {
-  var HS_KEY = 'pyonpyon-bird.highscore';
-  var GRAVITY = 0.20;
-  var FLAP_VY = -5.2;
+  var DIFFICULTIES = {
+    'ちょうかんたん': { gravity: 0.15, flapVy: -4.5, speed: 1.2, gap: 280, minGap: 230, interval: 160, maxSpeed: 3.0, color: '#64B5F6' },
+    'かんたん':       { gravity: 0.18, flapVy: -5.0, speed: 1.4, gap: 250, minGap: 200, interval: 145, maxSpeed: 3.4, color: '#81C784' },
+    'ふつう':         { gravity: 0.20, flapVy: -5.2, speed: 1.6, gap: 220, minGap: 175, interval: 130, maxSpeed: 3.8, color: '#FFD54F' },
+    'むずい':         { gravity: 0.25, flapVy: -5.5, speed: 2.0, gap: 185, minGap: 150, interval: 110, maxSpeed: 4.5, color: '#EF5350' }
+  };
+  var DIFF_KEYS = ['ちょうかんたん', 'かんたん', 'ふつう', 'むずい'];
   var PIPE_WIDTH = 60;
-  var BASE_SPEED = 1.6;
-  var BASE_GAP = 220;
-  var MIN_GAP = 175;
-  var PIPE_INTERVAL = 130; // frames
+
+  var difficulty = 'ふつう';
+  var diffButtons = []; // { x, y, w, h, name } — populated in drawTitle
 
   var canvas, ctx, W, H, DPR;
-  var status, bird, pipes, score, best, frame, speed, gapSize;
+  var status, bird, pipes, score, frame, speed, gapSize;
   var deadTimer;
   var bgX = 0;
 
-  // Cloud positions (fixed relative, scroll independently)
   var clouds = [];
 
   function el(id) { return document.getElementById(id); }
+
+  function getBest() {
+    return parseInt(localStorage.getItem('pyonpyon-bird.hs.' + difficulty) || '0', 10);
+  }
+  function saveBest(v) {
+    localStorage.setItem('pyonpyon-bird.hs.' + difficulty, v);
+  }
 
   function init() {
     canvas = el('canvas');
@@ -24,10 +33,12 @@
     resize();
     window.addEventListener('resize', resize);
 
-    best = parseInt(localStorage.getItem(HS_KEY) || '0', 10);
-
-    canvas.addEventListener('click', onTap);
-    canvas.addEventListener('touchstart', function(e) { e.preventDefault(); onTap(); }, { passive: false });
+    canvas.addEventListener('click', function(e) { onTap(e.clientX, e.clientY); });
+    canvas.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      var t = e.touches[0];
+      onTap(t.clientX, t.clientY);
+    }, { passive: false });
     el('btn-retry').addEventListener('click', function() { hideOverlay(); startGame(); });
     el('btn-title').addEventListener('click', function() { hideOverlay(); status = 'waiting'; });
 
@@ -58,23 +69,34 @@
 
   function startGame() {
     Sound.init();
+    var p = DIFFICULTIES[difficulty];
     score = 0;
     frame = 0;
-    speed = BASE_SPEED;
-    gapSize = BASE_GAP;
+    speed = p.speed;
+    gapSize = p.gap;
     deadTimer = 0;
     bird = { x: W * 0.25, y: H * 0.45, vy: 0, rotation: 0 };
     pipes = [];
     status = 'playing';
   }
 
-  function onTap() {
+  function onTap(clientX, clientY) {
     if (status === 'waiting') {
-      startGame();
-      bird.vy = FLAP_VY;
-      Sound.play('flap');
+      var rect = canvas.getBoundingClientRect();
+      var cx = (clientX - rect.left) * (W / rect.width);
+      var cy = (clientY - rect.top)  * (H / rect.height);
+      for (var i = 0; i < diffButtons.length; i++) {
+        var b = diffButtons[i];
+        if (cx >= b.x && cx <= b.x + b.w && cy >= b.y && cy <= b.y + b.h) {
+          difficulty = b.name;
+          startGame();
+          bird.vy = DIFFICULTIES[difficulty].flapVy;
+          Sound.play('flap');
+          return;
+        }
+      }
     } else if (status === 'playing') {
-      bird.vy = FLAP_VY;
+      bird.vy = DIFFICULTIES[difficulty].flapVy;
       Sound.play('flap');
     }
   }
@@ -94,14 +116,16 @@
 
     if (status !== 'playing') {
       if (status === 'dead') {
-        bird.vy += GRAVITY;
+        var p = DIFFICULTIES[difficulty];
+        bird.vy += p.gravity;
         bird.y += bird.vy;
         bird.rotation += 0.12;
         deadTimer--;
         if (deadTimer <= 0) {
+          var best = getBest();
           if (score > best) {
             best = score;
-            localStorage.setItem(HS_KEY, best);
+            saveBest(best);
           }
           el('go-score').textContent = score;
           el('go-best').textContent  = best;
@@ -112,19 +136,21 @@
       return;
     }
 
+    var p = DIFFICULTIES[difficulty];
+
     frame++;
 
     // Difficulty scaling
-    if (frame % 1200 === 0) speed = Math.min(speed + 0.3, 3.8);
-    if (frame % 2400 === 0) gapSize = Math.max(gapSize - 3, MIN_GAP);
+    if (frame % 1200 === 0) speed = Math.min(speed + 0.3, p.maxSpeed);
+    if (frame % 2400 === 0) gapSize = Math.max(gapSize - 3, p.minGap);
 
     // Bird physics
-    bird.vy += GRAVITY;
+    bird.vy += p.gravity;
     bird.y  += bird.vy;
     bird.rotation = Math.max(-0.5, Math.min(1.2, bird.vy * 0.08));
 
     // Spawn pipes
-    if (frame % PIPE_INTERVAL === 0) {
+    if (frame % p.interval === 0) {
       var minY = H * 0.2;
       var maxY = H * 0.75 - gapSize;
       var gapY = minY + Math.random() * (maxY - minY);
@@ -146,9 +172,9 @@
     var bR = getBirdRadius() - 4;
     if (bird.y - bR < 0 || bird.y + bR > H) { die(); return; }
     for (var j = 0; j < pipes.length; j++) {
-      var p = pipes[j];
-      if (bird.x + bR > p.x && bird.x - bR < p.x + PIPE_WIDTH) {
-        if (bird.y - bR < p.gapY || bird.y + bR > p.gapY + p.gap) { die(); return; }
+      var pp = pipes[j];
+      if (bird.x + bR > pp.x && bird.x - bR < pp.x + PIPE_WIDTH) {
+        if (bird.y - bR < pp.gapY || bird.y + bR > pp.gapY + pp.gap) { die(); return; }
       }
     }
   }
@@ -164,20 +190,17 @@
   // ---- Drawing ----
 
   function drawBg() {
-    // Sky gradient
     var grad = ctx.createLinearGradient(0, 0, 0, H);
     grad.addColorStop(0, '#64B5F6');
     grad.addColorStop(1, '#B3E5FC');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W, H);
 
-    // Ground
     ctx.fillStyle = '#8BC34A';
     ctx.fillRect(0, H - 32, W, 32);
     ctx.fillStyle = '#558B2F';
     ctx.fillRect(0, H - 16, W, 16);
 
-    // Clouds
     ctx.fillStyle = 'rgba(255,255,255,0.85)';
     clouds.forEach(function(c) {
       var cx = ((c.x * W + bgX * 0.3) % (W + 80)) - 40;
@@ -190,7 +213,7 @@
   function drawCloud(x, y, w) {
     var h = w * 0.4;
     ctx.beginPath();
-    ctx.ellipse(x,         y,       w * 0.5, h * 0.6, 0, 0, Math.PI * 2);
+    ctx.ellipse(x,          y,        w * 0.5,  h * 0.6,  0, 0, Math.PI * 2);
     ctx.ellipse(x + w*0.25, y - h*0.2, w * 0.35, h * 0.55, 0, 0, Math.PI * 2);
     ctx.ellipse(x - w*0.25, y + h*0.1, w * 0.28, h * 0.45, 0, 0, Math.PI * 2);
     ctx.fill();
@@ -198,9 +221,7 @@
 
   function drawPipes() {
     pipes.forEach(function(p) {
-      // Top pipe
       drawPipe(p.x, 0, PIPE_WIDTH, p.gapY, true);
-      // Bottom pipe
       drawPipe(p.x, p.gapY + p.gap, PIPE_WIDTH, H - (p.gapY + p.gap) - 32, false);
     });
   }
@@ -226,7 +247,6 @@
       ctx.fill();
     }
 
-    // Highlight
     ctx.fillStyle = 'rgba(255,255,255,0.18)';
     if (isTop) {
       ctx.fillRect(x + 4, y, 8, h - capH);
@@ -256,7 +276,6 @@
     ctx.translate(bird.x, bird.y);
     ctx.rotate(bird.rotation);
 
-    // Body
     ctx.beginPath();
     ctx.arc(0, 0, r, 0, Math.PI * 2);
     ctx.fillStyle = '#FFD54F';
@@ -265,7 +284,6 @@
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Eye
     ctx.beginPath();
     ctx.arc(r * 0.35, -r * 0.2, r * 0.28, 0, Math.PI * 2);
     ctx.fillStyle = '#fff';
@@ -275,7 +293,6 @@
     ctx.fillStyle = '#333';
     ctx.fill();
 
-    // Beak
     ctx.beginPath();
     ctx.moveTo(r * 0.7, -r * 0.05);
     ctx.lineTo(r * 1.2, r * 0.08);
@@ -284,7 +301,6 @@
     ctx.fillStyle = '#FF8F00';
     ctx.fill();
 
-    // Wing (flap based on vy)
     var wingY = bird.vy < -2 ? -r * 0.45 : r * 0.1;
     ctx.beginPath();
     ctx.ellipse(-r * 0.2, wingY, r * 0.5, r * 0.25, -0.4, 0, Math.PI * 2);
@@ -305,32 +321,73 @@
   }
 
   function drawTitle() {
-    // Panel
+    var panelX = W * 0.08;
+    var panelY = H * 0.18;
+    var panelW = W * 0.84;
+    var panelH = H * 0.58;
+
+    // Shadow
     ctx.fillStyle = 'rgba(0,0,0,0.35)';
-    roundRect(ctx, W*0.1, H*0.25, W*0.8, H*0.38, 20);
+    roundRect(ctx, panelX + 3, panelY + 3, panelW, panelH, 20);
     ctx.fill();
 
+    // Panel
     ctx.fillStyle = 'rgba(255,255,255,0.95)';
-    roundRect(ctx, W*0.12, H*0.27, W*0.76, H*0.34, 16);
+    roundRect(ctx, panelX, panelY, panelW, panelH, 20);
     ctx.fill();
 
+    // Title text
     ctx.textAlign = 'center';
     ctx.fillStyle = '#F57C00';
-    ctx.font = 'bold ' + Math.floor(W * 0.11) + 'px sans-serif';
-    ctx.fillText('ぴょんぴょん', W/2, H * 0.35);
-    ctx.fillText('バード 🐥', W/2, H * 0.44);
+    ctx.font = 'bold ' + Math.floor(W * 0.1) + 'px sans-serif';
+    ctx.fillText('ぴょんぴょん', W/2, panelY + panelH * 0.16);
+    ctx.fillText('バード 🐥', W/2, panelY + panelH * 0.28);
 
-    ctx.font = Math.floor(W * 0.065) + 'px sans-serif';
-    ctx.fillStyle = '#555';
-    ctx.fillText('ベスト: ' + best, W/2, H * 0.53);
+    ctx.font = Math.floor(W * 0.055) + 'px sans-serif';
+    ctx.fillStyle = '#777';
+    ctx.fillText('ベスト: ' + getBest(), W/2, panelY + panelH * 0.39);
 
-    ctx.font = 'bold ' + Math.floor(W * 0.065) + 'px sans-serif';
-    ctx.fillStyle = '#E53935';
-    var pulse = 0.9 + 0.1 * Math.sin(frame * 0.1);
-    ctx.save();
-    ctx.scale(pulse, pulse);
-    ctx.fillText('タップでスタート！', W / (2 * pulse), (H * 0.63) / pulse);
-    ctx.restore();
+    // Difficulty buttons
+    var btnW = panelW * 0.76;
+    var btnH = panelH * 0.115;
+    var btnX = panelX + (panelW - btnW) / 2;
+    var btnGap = panelH * 0.025;
+    var btnStartY = panelY + panelH * 0.46;
+    var newButtons = [];
+
+    DIFF_KEYS.forEach(function(name, i) {
+      var d = DIFFICULTIES[name];
+      var by = btnStartY + i * (btnH + btnGap);
+      var isSelected = (name === difficulty);
+
+      // Button background
+      if (isSelected) {
+        ctx.fillStyle = d.color;
+        roundRect(ctx, btnX, by, btnW, btnH, 10);
+        ctx.fill();
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 3;
+        roundRect(ctx, btnX, by, btnW, btnH, 10);
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = 'rgba(0,0,0,0.07)';
+        roundRect(ctx, btnX, by, btnW, btnH, 10);
+        ctx.fill();
+        ctx.strokeStyle = d.color;
+        ctx.lineWidth = 2;
+        roundRect(ctx, btnX, by, btnW, btnH, 10);
+        ctx.stroke();
+      }
+
+      ctx.textAlign = 'center';
+      ctx.font = 'bold ' + Math.floor(btnH * 0.52) + 'px sans-serif';
+      ctx.fillStyle = isSelected ? '#fff' : '#555';
+      ctx.fillText(name, btnX + btnW / 2, by + btnH * 0.68);
+
+      newButtons.push({ x: btnX, y: by, w: btnW, h: btnH, name: name });
+    });
+
+    diffButtons = newButtons;
   }
 
   function draw() {
