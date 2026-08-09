@@ -196,9 +196,7 @@ html, body {
 }
 
 #cat-arrow-icon {
-  font-size: 1.4rem;
-  display: inline-block;
-  line-height: 1;
+  display: block;
   transition: transform 0.08s linear;
 }
 
