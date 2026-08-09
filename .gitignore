@@ -16,3 +16,6 @@ node_modules/
 
 # Claude Code ローカル設定
 .claude/settings.local.json
+
+# Google Analytics タグ（デプロイ先にだけ置く。リポジトリには含めない）
+games/ga.js

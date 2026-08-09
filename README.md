@@ -41,3 +41,19 @@ tokita_games/
 python3 -m http.server 8000
 # → http://localhost:8000 を開く
 ```
+
+### Google Analytics を有効にする
+
+`games/ga.js` をデプロイ先サーバに配置すると Google Analytics が全ページで有効になる。リポジトリにはコミットしない（`.gitignore` で除外済み）。
+
+```js
+// games/ga.js の中身の例（G-XXXXXXXXXX は実際の測定 ID に置き換える）
+var s = document.createElement('script');
+s.async = true;
+s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+document.head.appendChild(s);
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'G-XXXXXXXXXX');
+```
