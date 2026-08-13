@@ -76,13 +76,22 @@
     if (timeLeft <= 3 && timeLeft > 0) Sound.play('tick');
   }
 
+  var lastScore = 0;
+
   function onEnd(score) {
+    lastScore = score;
     saveHighscore(score);
     var hs = getHighscore();
     el('result-score').textContent = score;
     el('result-highscore').textContent = hs;
     el('result-emoji').textContent = score >= 20 ? '🏆' : score >= 10 ? '🎉' : '😅';
     setTimeout(function() { showScreen('result'); }, 400);
+  }
+
+  function shareToX() {
+    var url = window.location.href.replace(/\/index\.html$/, '/');
+    var text = 'モグポン！をプレイしました！\nスコア：' + lastScore + '点🐹\n' + url + '\n#モグポン #トキタゲームズ';
+    window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
   }
 
   // ---- Start game ----
@@ -104,6 +113,7 @@
   function init() {
     el('title-highscore').textContent = getHighscore();
     el('btn-start').addEventListener('click', startGame);
+    el('btn-share').addEventListener('click', shareToX);
     el('btn-retry').addEventListener('click', startGame);
     el('btn-title').addEventListener('click', function() {
       el('title-highscore').textContent = getHighscore();

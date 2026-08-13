@@ -103,6 +103,22 @@ html, body {
   min-height: 48px;
 }
 
+.btn-share {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
+  min-height: 48px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.1s;
+}
+.btn-share:active { transform: scale(0.96); }
+
 .label {
   font-size: 0.65rem;
   color: #aaa;
@@ -191,10 +207,10 @@ html, body {
 
 .mog {
   position: absolute;
-  bottom: -100%;
+  bottom: -150%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: clamp(4rem, 24vw, 6.5rem);
+  font-size: clamp(3rem, 17vw, 4.5rem);
   line-height: 1;
   transition: bottom 0.15s ease-out;
   pointer-events: none;
@@ -207,7 +223,7 @@ html, body {
 }
 
 .hole.hiding .mog {
-  bottom: -100%;
+  bottom: -150%;
   transition: bottom 0.2s ease-in;
 }
 
