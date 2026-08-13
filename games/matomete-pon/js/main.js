@@ -97,6 +97,7 @@
     titleBestEl.textContent = Game.getBest().toLocaleString();
     showScreen('title');
   });
+  document.getElementById('btn-go-share').addEventListener('click', shareToX);
   document.getElementById('btn-go-retry').addEventListener('click', startGame);
   document.getElementById('btn-go-title').addEventListener('click', function () {
     titleBestEl.textContent = Game.getBest().toLocaleString();
