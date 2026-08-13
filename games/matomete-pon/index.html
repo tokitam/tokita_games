@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <script src="../ga.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>まとめてポン！</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="screen-title" class="screen active">
+    <h1 class="logo">まとめて<br>ポン！</h1>
+    <div class="title-hs">
+      <span class="label">ハイスコア</span>
+      <span id="title-best">0</span>
+    </div>
+    <button id="btn-start" class="btn-primary">スタート！</button>
+    <p class="hint">つながってる同じ色を<br>まとめてポン！と消そう</p>
+  </div>
+
+  <div id="screen-game" class="screen">
+    <div class="game-hud">
+      <div class="hud-item">
+        <span class="label">スコア</span>
+        <span id="score">0</span>
+      </div>
+      <div class="hud-item">
+        <span class="label">ベスト</span>
+        <span id="best">0</span>
+      </div>
+    </div>
+    <div id="canvas-wrap">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <div id="screen-clear" class="screen">
+    <div class="result-emoji">🎉</div>
+    <h2 class="result-title">クリア！</h2>
+    <div class="result-card">
+      <div class="result-row"><span>スコア</span><span id="clear-score">0</span></div>
+      <div class="result-row result-hs"><span>ハイスコア</span><span id="clear-best">0</span></div>
+    </div>
+    <div class="btn-stack">
+      <button id="btn-share" class="btn-share">𝕏 でシェアする</button>
+      <button id="btn-clear-retry" class="btn-primary">もういちど！</button>
+      <button id="btn-clear-title" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <div id="screen-gameover" class="screen">
+    <div class="result-emoji">😢</div>
+    <h2 class="result-title">ゲームオーバー</h2>
+    <div class="result-card">
+      <div class="result-row"><span>スコア</span><span id="go-score">0</span></div>
+      <div class="result-row result-hs"><span>ハイスコア</span><span id="go-best">0</span></div>
+    </div>
+    <div class="btn-stack">
+      <button id="btn-go-retry" class="btn-primary">もういちど！</button>
+      <button id="btn-go-title" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="js/game.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

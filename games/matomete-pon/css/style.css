@@ -1,0 +1,211 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --bg: #1a1a2e;
+  --primary: #e94560;
+  --primary-shadow: rgba(233, 69, 96, 0.4);
+  --text: #eee;
+  --card: rgba(255, 255, 255, 0.08);
+  --radius: 16px;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  color: var(--text);
+  user-select: none;
+  touch-action: none;
+}
+
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+.screen.active { display: flex; }
+
+/* ---- Title ---- */
+.logo {
+  font-size: clamp(2.4rem, 9vw, 3.8rem);
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.15;
+  color: var(--primary);
+  text-shadow: 3px 3px 0 rgba(233, 69, 96, 0.3);
+  margin-bottom: 24px;
+}
+
+.title-hs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 36px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+}
+.title-hs span:last-child {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #FFE66D;
+}
+
+.label {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  text-align: center;
+}
+
+.hint {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.8;
+}
+
+/* ---- Buttons ---- */
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 48px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 18px var(--primary-shadow);
+  transition: transform 0.1s;
+  min-height: 52px;
+}
+.btn-primary:active { transform: scale(0.96); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 48px;
+  transition: transform 0.1s;
+}
+.btn-secondary:active { transform: scale(0.96); }
+
+.btn-share {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 48px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s;
+}
+.btn-share:active { transform: scale(0.96); }
+
+/* ---- Game Screen ---- */
+#screen-game {
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.game-hud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hud-item span:last-child {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #FFE66D;
+}
+
+#canvas-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  padding: 8px;
+}
+
+#canvas {
+  display: block;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+/* ---- Result Screens ---- */
+.result-emoji {
+  font-size: 4rem;
+  margin-bottom: 12px;
+}
+
+.result-title {
+  font-size: clamp(1.8rem, 7vw, 2.6rem);
+  font-weight: 900;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.result-card {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 16px 48px;
+  margin-bottom: 24px;
+  min-width: 240px;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 8px 0;
+  font-size: 1.05rem;
+}
+.result-row span:last-child { font-weight: 800; }
+.result-hs span:last-child { color: #FFE66D; }
+
+.btn-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
