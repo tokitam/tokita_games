@@ -191,7 +191,7 @@ html, body {
 
 .mog {
   position: absolute;
-  bottom: -100%;
+  bottom: -150%;
   left: 50%;
   transform: translateX(-50%);
   font-size: clamp(3rem, 17vw, 4.5rem);
@@ -207,7 +207,7 @@ html, body {
 }
 
 .hole.hiding .mog {
-  bottom: -100%;
+  bottom: -150%;
   transition: bottom 0.2s ease-in;
 }
 
