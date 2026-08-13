@@ -103,6 +103,22 @@ html, body {
   min-height: 48px;
 }
 
+.btn-share {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
+  min-height: 48px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.1s;
+}
+.btn-share:active { transform: scale(0.96); }
+
 .label {
   font-size: 0.65rem;
   color: #aaa;
