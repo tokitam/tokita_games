@@ -85,8 +85,9 @@
   }
 
   function shareToX() {
+    var url = window.location.href.replace(/\/index\.html$/, '/');
     var text = '「まとめてポン！」プレイしました！\nスコア：' + Game.getScore().toLocaleString() + '点🎉\n' +
-               window.location.href + '\n#まとめてポン #トキタゲームズ';
+               url + '\n#まとめてポン #トキタゲームズ';
     window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
   }
 
