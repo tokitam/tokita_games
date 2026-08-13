@@ -194,7 +194,7 @@ html, body {
   bottom: -100%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: clamp(2.2rem, 8vw, 3.5rem);
+  font-size: clamp(4rem, 24vw, 6.5rem);
   line-height: 1;
   transition: bottom 0.15s ease-out;
   pointer-events: none;
@@ -203,7 +203,7 @@ html, body {
 }
 
 .hole.active .mog {
-  bottom: 10%;
+  bottom: 15%;
 }
 
 .hole.hiding .mog {
