@@ -146,9 +146,8 @@ var Renderer = (function () {
     requestAnimationFrame(step);
   }
 
-  function init(canvasEl, wrap) {
+  function init(canvasEl) {
     canvas = canvasEl;
-    resize(wrap);
   }
 
   return {

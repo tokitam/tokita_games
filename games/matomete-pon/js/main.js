@@ -77,11 +77,11 @@
 
   function startGame() {
     Game.init();
+    animating = false;
+    showScreen('game');
+    updateHUD();
     Renderer.resize(canvasWrap);
     Renderer.draw();
-    animating = false;
-    updateHUD();
-    showScreen('game');
   }
 
   function shareToX() {
@@ -110,7 +110,7 @@
     }
   });
 
-  Renderer.init(canvas, canvasWrap);
+  Renderer.init(canvas);
   Input.init(canvas, onTap, onHover);
   titleBestEl.textContent = Game.getBest().toLocaleString();
 })();
