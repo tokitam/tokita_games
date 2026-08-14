@@ -1,10 +1,10 @@
 var Game = (function() {
-  var GRAVITY    = 0.18;
-  var IMPULSE_X  = 3.2;
-  var IMPULSE_Y  = -4.8;
-  var FRICTION_X = 0.96;
-  var FRICTION_Y = 0.998;
-  var MAX_SPEED  = 7.0;
+  var GRAVITY    = 0.09;   // 低重力でふわっと
+  var IMPULSE_X  = 3.5;
+  var IMPULSE_Y  = -5.8;   // 大きめの上向き加速
+  var FRICTION_X = 0.988;  // 水平方向をほぼ維持してグライド感
+  var FRICTION_Y = 0.999;
+  var MAX_SPEED  = 8.5;
   var BOUNCE     = 0.55;
   var CHAR_SIZE  = 40;
   var MAX_HP     = 5;
@@ -81,11 +81,25 @@ var Game = (function() {
 
   function runAI() {
     if (--aiTimer <= 0) {
-      aiTimer = 55 + Math.floor(Math.random() * 30);
+      aiTimer = 22 + Math.floor(Math.random() * 18); // 行動頻度アップ
       var dx = player.x - cpu.x;
-      if (dx > 0) { cpu.vx += IMPULSE_X; cpu.vy += IMPULSE_Y; }
-      else        { cpu.vx -= IMPULSE_X; cpu.vy += IMPULSE_Y; }
-      if (Math.random() < 0.3) { cpu.vx += (Math.random() - 0.5) * 4; }
+      var dy = player.y - cpu.y;
+
+      // 自分が壁際なら逃げ優先
+      var nearWall = cpu.x < W * 0.12 || cpu.x + CHAR_SIZE > W * 0.88 ||
+                     cpu.y < H * 0.12 || cpu.y + CHAR_SIZE > H * 0.88;
+      if (nearWall) {
+        // 壁から遠ざかる方向に飛ぶ
+        cpu.vx += (W / 2 - (cpu.x + CHAR_SIZE / 2)) > 0 ? IMPULSE_X : -IMPULSE_X;
+        cpu.vy += IMPULSE_Y;
+      } else {
+        // プレイヤーに向かって突撃
+        cpu.vx += dx > 0 ? IMPULSE_X : -IMPULSE_X;
+        // 高さも合わせる（上にいるなら上へ、下にいるなら抑え気味）
+        cpu.vy += dy < -H * 0.2 ? IMPULSE_Y * 0.5 : IMPULSE_Y;
+        // 10% だけランダム外れ
+        if (Math.random() < 0.1) { cpu.vx += (Math.random() - 0.5) * 3; }
+      }
     }
   }
 
