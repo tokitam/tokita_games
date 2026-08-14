@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <script src="../ga.js?v=20260813" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>TOBI STACK — 箱積み職人</title>
+  <link rel="stylesheet" href="css/style.css?v=20260814">
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="canvas"></canvas>
+    <div id="overlay-result" class="overlay hidden">
+      <div class="overlay-inner">
+        <div class="over-emoji" id="result-emoji">🏆</div>
+        <div class="over-title" id="result-title">タイムアップ！</div>
+        <div class="over-score">スコア: <span id="go-score">0</span></div>
+        <div class="over-best">ベスト: <span id="go-best">0</span></div>
+        <button id="btn-retry" class="btn-primary">もういちど！</button>
+        <button id="btn-title" class="btn-secondary">タイトルへ</button>
+      </div>
+    </div>
+  </div>
+  <script src="vendor/matter.min.js"></script>
+  <script src="js/sound.js?v=20260814"></script>
+  <script src="js/game.js?v=20260814"></script>
+</body>
+</html>
