@@ -95,18 +95,17 @@ async function init() {
   controller = new CharacterController(world);
   scene.add(controller.root);
   anim = null;
-  await loadCharacter();
 
   // Camera
   cam = new ThirdPersonCamera(window.innerWidth / window.innerHeight);
 
-  // Hide loading
+  // シーン構築完了でローディングを解除してゲームを開始
+  // GLB 読み込みはバックグラウンドで行い、失敗してもカプセルのまま続行
   document.getElementById('loading').classList.add('hidden');
-
-  // Fade out hint after 4 s
   setTimeout(() => document.getElementById('hint').classList.add('hidden'), 4000);
-
   renderer.setAnimationLoop(tick);
+
+  loadCharacter().catch(e => console.warn('Character load error:', e));
 }
 
 // ── Character model ───────────────────────────────────────────────────────────
@@ -161,4 +160,9 @@ function tick(time) {
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
-init().catch(console.error);
+init().catch(e => {
+  console.error(e);
+  // 万が一 init でエラーが出てもローディングを消してエラー表示する
+  const ld = document.getElementById('loading');
+  if (ld) { ld.innerHTML = '<div style="color:#f66;font-family:sans-serif;padding:20px">エラーが発生しました。<br>ブラウザの開発者ツールで詳細を確認してください。</div>'; }
+});
