@@ -1,11 +1,11 @@
 var Game = (function() {
-  var GRAVITY    = 0.09;   // 低重力でふわっと
-  var IMPULSE_X  = 3.5;
-  var IMPULSE_Y  = -5.8;   // 大きめの上向き加速
-  var FRICTION_X = 0.988;  // 水平方向をほぼ維持してグライド感
+  var GRAVITY    = 0.07;
+  var IMPULSE_X  = 2.4;
+  var IMPULSE_Y  = -3.8;   // 上向き（負値）
+  var FRICTION_X = 0.990;
   var FRICTION_Y = 0.999;
-  var MAX_SPEED  = 8.5;
-  var BOUNCE     = 0.55;
+  var MAX_SPEED  = 5.5;
+  var BOUNCE     = 0.50;
   var CHAR_SIZE  = 40;
   var MAX_HP     = 5;
   var INVINCIBLE = 20;
@@ -38,6 +38,9 @@ var Game = (function() {
     W = w; H = h;
     player = makeChar(W * 0.25 - CHAR_SIZE / 2, H * 0.5);
     cpu    = makeChar(W * 0.75 - CHAR_SIZE / 2, H * 0.5);
+    // 開始直後: 互いに相手方向・斜め上へ少し飛び出す
+    player.vx =  1.4; player.vy = -2.2;
+    cpu.vx    = -1.4; cpu.vy    = -2.2;
     aiTimer = 60;
     makeClouds();
     phase  = 'playing';
@@ -79,6 +82,14 @@ var Game = (function() {
     return false;
   }
 
+  // 縦方向インパルス: ターゲットが上なら上向き、下なら下向き、同じ高さなら0
+  function vyTo(fromY, toY) {
+    var dy = toY - fromY;
+    if (dy < -H * 0.12) return IMPULSE_Y;          // 上へ（負値）
+    if (dy >  H * 0.12) return -IMPULSE_Y * 0.4;   // 下へ（正値・重力もあるので弱め）
+    return 0;
+  }
+
   function runAI() {
     if (--aiTimer <= 0) {
       aiTimer = 22 + Math.floor(Math.random() * 18);
@@ -90,19 +101,19 @@ var Game = (function() {
       var dist = Math.sqrt((px - cx) * (px - cx) + (py - cy) * (py - cy));
 
       // 1. 自分が壁際 → 中央へ逃げる（最優先）
+      //    縦方向は中央に向けて判断（天井近くでも上には飛ばない）
       var cpuNearWall = cpu.x < W * 0.15 || cpu.x + CHAR_SIZE > W * 0.85 ||
                         cpu.y < H * 0.15 || cpu.y + CHAR_SIZE > H * 0.85;
       if (cpuNearWall) {
         cpu.vx += (W / 2 - cx) > 0 ? IMPULSE_X : -IMPULSE_X;
-        cpu.vy += IMPULSE_Y;
+        cpu.vy += vyTo(cy, H / 2);
         return;
       }
 
-      // 2. プレイヤーに近すぎる → 横にかわして衝突回避
+      // 2. プレイヤーに近すぎる → 横にかわすだけ（縦は動かさない）
       if (dist < CHAR_SIZE * 2.5) {
-        // プレイヤーと反対方向に飛ぶ
         cpu.vx += (cx - px) > 0 ? IMPULSE_X : -IMPULSE_X;
-        cpu.vy += IMPULSE_Y;
+        // 縦は触らず重力に任せる
         return;
       }
 
@@ -113,30 +124,25 @@ var Game = (function() {
       var playerPinnedBot   = player.y + CHAR_SIZE > H * 0.78;
       if (playerPinnedLeft || playerPinnedRight || playerPinnedTop || playerPinnedBot) {
         cpu.vx += (px - cx) > 0 ? IMPULSE_X : -IMPULSE_X;
-        cpu.vy += IMPULSE_Y;
+        cpu.vy += vyTo(cy, py);
         return;
       }
 
-      // 4. それ以外 → プレイヤーの背後（壁側）に回り込んでポジション取り
-      // プレイヤーから最も近い壁方向の反対側に陣取る
-      var toLeft   = px;
-      var toRight  = W - px;
-      var toTop    = py;
-      var toBot    = H - py;
-      var minH = Math.min(toLeft, toRight);
-      var minV = Math.min(toTop, toBot);
+      // 4. それ以外 → プレイヤーの逆側（壁から遠い側）にポジション取り
+      var toLeft  = px;
+      var toRight = W - px;
+      var toTop   = py;
+      var toBot   = H - py;
       var targetX, targetY;
-      if (minH < minV) {
-        // 左右壁の方が近い → その逆側に回る
+      if (Math.min(toLeft, toRight) < Math.min(toTop, toBot)) {
         targetX = toLeft < toRight ? px + W * 0.28 : px - W * 0.28;
-        targetY = py;
+        targetY = H / 2;  // 縦は中央高さを目標（天井に突っ込まない）
       } else {
-        // 上下壁の方が近い → その逆側に回る
         targetX = px;
         targetY = toTop < toBot ? py + H * 0.28 : py - H * 0.28;
       }
       cpu.vx += (targetX - cx) > 0 ? IMPULSE_X * 0.75 : -IMPULSE_X * 0.75;
-      cpu.vy += IMPULSE_Y * 0.85;
+      cpu.vy += vyTo(cy, targetY);
     }
   }
 
