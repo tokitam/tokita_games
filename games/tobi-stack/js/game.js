@@ -5,12 +5,14 @@
   var BLOCK_UNIT = 50; // px per score "stage"
 
   var SHAPES = [
-    { name: 'square', w: 60, h: 60,  color: '#ff6b6b' },
-    { name: 'wide',   w: 120, h: 40, color: '#ffd93d' },
-    { name: 'tall',   w: 40, h: 100, color: '#6bcb77' },
-    { name: 'big',    w: 90, h: 65,  color: '#4d96ff' },
-    { name: 'plank',  w: 150, h: 28, color: '#c77dff' },
-    { name: 'brick',  w: 80, h: 45,  color: '#ff922b' },
+    { name: 'square',   type: 'rect',     w: 60,  h: 60,  color: '#ff6b6b' },
+    { name: 'wide',     type: 'rect',     w: 120, h: 40,  color: '#ffd93d' },
+    { name: 'tall',     type: 'rect',     w: 40,  h: 100, color: '#6bcb77' },
+    { name: 'big',      type: 'rect',     w: 90,  h: 65,  color: '#4d96ff' },
+    { name: 'plank',    type: 'rect',     w: 150, h: 28,  color: '#c77dff' },
+    { name: 'brick',    type: 'rect',     w: 80,  h: 45,  color: '#ff922b' },
+    { name: 'circle',   type: 'circle',   radius: 34,     color: '#00d4ff' },
+    { name: 'triangle', type: 'triangle', radius: 46,     color: '#ff4dff' },
   ];
 
   // ---- State ----
@@ -137,13 +139,16 @@
     var idx  = nextShapeIdx;
     nextShapeIdx = Math.floor(Math.random() * SHAPES.length);
     var shape = SHAPES[idx];
-    activeBlock = { x: W / 2, y: shape.h / 2 + 20, angle: 0, shape: shape };
+    var topY = shape.type === 'rect' ? shape.h / 2 + 20 : shape.radius + 20;
+    activeBlock = { x: W / 2, y: topY, angle: 0, shape: shape };
   }
 
   function activeHalfW() {
     if (!activeBlock) return 0;
+    var s = activeBlock.shape;
+    if (s.type === 'circle' || s.type === 'triangle') return s.radius;
     var norm = ((Math.round(activeBlock.angle / (Math.PI / 2)) % 2) + 2) % 2;
-    return norm === 1 ? activeBlock.shape.h / 2 : activeBlock.shape.w / 2;
+    return norm === 1 ? s.h / 2 : s.w / 2;
   }
 
   function moveBlock(dir) {
@@ -155,8 +160,8 @@
 
   function rotateBlock() {
     if (!activeBlock) return;
+    if (activeBlock.shape.type === 'circle') return; // circles are symmetric
     activeBlock.angle += Math.PI / 2;
-    // Clamp position after rotation
     var hw = activeHalfW();
     activeBlock.x = Math.max(hw + 4, Math.min(W - hw - 4, activeBlock.x));
     Sound.play('rotate');
@@ -165,14 +170,24 @@
   function placeBlock() {
     if (!activeBlock || spawning) return;
     var s = activeBlock.shape;
-    var body = Matter.Bodies.rectangle(
-      activeBlock.x, activeBlock.y, s.w, s.h,
-      { friction: 0.75, restitution: 0.06, frictionAir: 0.01, density: 0.003, label: 'block' }
-    );
-    Matter.Body.setAngle(body, activeBlock.angle);
+    var opts = { friction: 0.75, restitution: 0.06, frictionAir: 0.01, density: 0.003, label: 'block' };
+    var body;
+    var entry;
+    if (s.type === 'circle') {
+      body = Matter.Bodies.circle(activeBlock.x, activeBlock.y, s.radius, opts);
+      entry = { body: body, color: s.color, type: 'circle', radius: s.radius };
+    } else if (s.type === 'triangle') {
+      body = Matter.Bodies.polygon(activeBlock.x, activeBlock.y, 3, s.radius, opts);
+      Matter.Body.setAngle(body, activeBlock.angle);
+      entry = { body: body, color: s.color, type: 'triangle' };
+    } else {
+      body = Matter.Bodies.rectangle(activeBlock.x, activeBlock.y, s.w, s.h, opts);
+      Matter.Body.setAngle(body, activeBlock.angle);
+      entry = { body: body, color: s.color, type: 'rect', w: s.w, h: s.h };
+    }
     Matter.Body.setVelocity(body, { x: 0, y: 7 });
     Matter.World.add(world, body);
-    stackBodies.push({ body: body, color: s.color, w: s.w, h: s.h });
+    stackBodies.push(entry);
     Sound.play('place');
     activeBlock = null;
     spawning = true;
@@ -280,15 +295,41 @@
     var pos = b.body.position;
     ctx.save();
     ctx.translate(pos.x, pos.y);
-    ctx.rotate(b.body.angle);
     ctx.fillStyle = b.color;
     ctx.strokeStyle = 'rgba(255,255,255,0.25)';
     ctx.lineWidth = 2;
-    ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h);
-    ctx.strokeRect(-b.w / 2, -b.h / 2, b.w, b.h);
-    // Highlight sheen
-    ctx.fillStyle = 'rgba(255,255,255,0.13)';
-    ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h * 0.35);
+
+    if (b.type === 'circle') {
+      ctx.beginPath();
+      ctx.arc(0, 0, b.radius, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+      // Sheen highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.18)';
+      ctx.beginPath();
+      ctx.arc(-b.radius * 0.28, -b.radius * 0.28, b.radius * 0.38, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (b.type === 'triangle') {
+      // Use body vertices (world coords → local by subtracting pos)
+      var verts = b.body.vertices;
+      ctx.beginPath();
+      ctx.moveTo(verts[0].x - pos.x, verts[0].y - pos.y);
+      for (var i = 1; i < verts.length; i++) {
+        ctx.lineTo(verts[i].x - pos.x, verts[i].y - pos.y);
+      }
+      ctx.closePath();
+      ctx.fill(); ctx.stroke();
+      // Sheen: small circle near top vertex
+      ctx.fillStyle = 'rgba(255,255,255,0.13)';
+      ctx.beginPath();
+      ctx.arc((verts[0].x - pos.x) * 0.45, (verts[0].y - pos.y) * 0.45, 8, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.rotate(b.body.angle);
+      ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h);
+      ctx.strokeRect(-b.w / 2, -b.h / 2, b.w, b.h);
+      ctx.fillStyle = 'rgba(255,255,255,0.13)';
+      ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h * 0.35);
+    }
     ctx.restore();
   }
 
@@ -296,31 +337,52 @@
     var ab = activeBlock, s = ab.shape;
     ctx.save();
     ctx.translate(ab.x, ab.y);
-    ctx.rotate(ab.angle);
 
-    // Ghost fill
-    ctx.fillStyle = s.color;
-    ctx.globalAlpha = 0.9;
-    ctx.fillRect(-s.w / 2, -s.h / 2, s.w, s.h);
-    ctx.globalAlpha = 1;
+    // Build shape path in local space (before angle rotation)
+    function shapeBottom() {
+      return s.type === 'rect' ? s.h / 2 : s.radius;
+    }
 
-    // Border
-    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(-s.w / 2, -s.h / 2, s.w, s.h);
+    if (s.type === 'circle') {
+      ctx.fillStyle = s.color;
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath(); ctx.arc(0, 0, s.radius, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0, 0, s.radius, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,0.2)';
+      ctx.beginPath(); ctx.arc(-s.radius * 0.28, -s.radius * 0.28, s.radius * 0.38, 0, Math.PI * 2); ctx.fill();
+    } else if (s.type === 'triangle') {
+      ctx.rotate(ab.angle);
+      ctx.beginPath();
+      for (var i = 0; i < 3; i++) {
+        var a = i * 2 * Math.PI / 3;
+        ctx.lineTo(s.radius * Math.cos(a), s.radius * Math.sin(a));
+      }
+      ctx.closePath();
+      ctx.fillStyle = s.color;
+      ctx.globalAlpha = 0.9; ctx.fill(); ctx.globalAlpha = 1;
+      ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.rotate(-ab.angle); // unrotate for guide
+    } else {
+      ctx.rotate(ab.angle);
+      ctx.fillStyle = s.color;
+      ctx.globalAlpha = 0.9;
+      ctx.fillRect(-s.w / 2, -s.h / 2, s.w, s.h); ctx.globalAlpha = 1;
+      ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 2;
+      ctx.strokeRect(-s.w / 2, -s.h / 2, s.w, s.h);
+      ctx.fillStyle = 'rgba(255,255,255,0.2)';
+      ctx.fillRect(-s.w / 2, -s.h / 2, s.w, s.h * 0.35);
+      ctx.rotate(-ab.angle); // unrotate for guide
+    }
 
-    // Sheen
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.fillRect(-s.w / 2, -s.h / 2, s.w, s.h * 0.35);
-
-    // Drop guide (vertical line going down)
-    ctx.rotate(-ab.angle); // unrotate so guide is always vertical
+    // Drop guide (always vertical)
     ctx.setLineDash([4, 6]);
     ctx.strokeStyle = 'rgba(255,255,255,0.2)';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(0, s.h / 2 + 4);
-    ctx.lineTo(0, H - ab.y + s.h / 2);
+    ctx.moveTo(0, shapeBottom() + 4);
+    ctx.lineTo(0, H - ab.y + shapeBottom());
     ctx.stroke();
     ctx.setLineDash([]);
 
@@ -354,17 +416,34 @@
 
     // Next block preview
     var ns = SHAPES[nextShapeIdx];
-    var nw = Math.min(ns.w * 0.45, 55);
-    var nh = ns.h / ns.w * nw;
     ctx.textAlign = 'left';
     ctx.fillStyle = 'rgba(255,255,255,0.4)';
     ctx.font = Math.floor(W * 0.03) + 'px sans-serif';
     ctx.fillText('NEXT', 10, H - 30);
+    ctx.save();
+    ctx.translate(78, H - 38);
     ctx.fillStyle = ns.color;
     ctx.strokeStyle = 'rgba(255,255,255,0.3)';
     ctx.lineWidth = 1;
-    ctx.fillRect(54, H - 30 - nh / 2 - 4, nw, nh);
-    ctx.strokeRect(54, H - 30 - nh / 2 - 4, nw, nh);
+    if (ns.type === 'circle') {
+      var pr = Math.min(ns.radius * 0.5, 18);
+      ctx.beginPath(); ctx.arc(0, 0, pr, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+    } else if (ns.type === 'triangle') {
+      var tr = Math.min(ns.radius * 0.5, 20);
+      ctx.beginPath();
+      for (var ti = 0; ti < 3; ti++) {
+        var ta = ti * 2 * Math.PI / 3 - Math.PI / 2;
+        ctx.lineTo(tr * Math.cos(ta), tr * Math.sin(ta));
+      }
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+    } else {
+      var nw = Math.min(ns.w * 0.4, 50);
+      var nh = ns.h / ns.w * nw;
+      ctx.fillRect(-nw / 2, -nh / 2, nw, nh);
+      ctx.strokeRect(-nw / 2, -nh / 2, nw, nh);
+    }
+    ctx.restore();
   }
 
   // ---- Title ----
