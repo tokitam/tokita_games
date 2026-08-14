@@ -81,25 +81,62 @@ var Game = (function() {
 
   function runAI() {
     if (--aiTimer <= 0) {
-      aiTimer = 22 + Math.floor(Math.random() * 18); // 行動頻度アップ
-      var dx = player.x - cpu.x;
-      var dy = player.y - cpu.y;
+      aiTimer = 22 + Math.floor(Math.random() * 18);
 
-      // 自分が壁際なら逃げ優先
-      var nearWall = cpu.x < W * 0.12 || cpu.x + CHAR_SIZE > W * 0.88 ||
-                     cpu.y < H * 0.12 || cpu.y + CHAR_SIZE > H * 0.88;
-      if (nearWall) {
-        // 壁から遠ざかる方向に飛ぶ
-        cpu.vx += (W / 2 - (cpu.x + CHAR_SIZE / 2)) > 0 ? IMPULSE_X : -IMPULSE_X;
+      var cx  = cpu.x    + CHAR_SIZE / 2;
+      var cy  = cpu.y    + CHAR_SIZE / 2;
+      var px  = player.x + CHAR_SIZE / 2;
+      var py  = player.y + CHAR_SIZE / 2;
+      var dist = Math.sqrt((px - cx) * (px - cx) + (py - cy) * (py - cy));
+
+      // 1. 自分が壁際 → 中央へ逃げる（最優先）
+      var cpuNearWall = cpu.x < W * 0.15 || cpu.x + CHAR_SIZE > W * 0.85 ||
+                        cpu.y < H * 0.15 || cpu.y + CHAR_SIZE > H * 0.85;
+      if (cpuNearWall) {
+        cpu.vx += (W / 2 - cx) > 0 ? IMPULSE_X : -IMPULSE_X;
         cpu.vy += IMPULSE_Y;
-      } else {
-        // プレイヤーに向かって突撃
-        cpu.vx += dx > 0 ? IMPULSE_X : -IMPULSE_X;
-        // 高さも合わせる（上にいるなら上へ、下にいるなら抑え気味）
-        cpu.vy += dy < -H * 0.2 ? IMPULSE_Y * 0.5 : IMPULSE_Y;
-        // 10% だけランダム外れ
-        if (Math.random() < 0.1) { cpu.vx += (Math.random() - 0.5) * 3; }
+        return;
       }
+
+      // 2. プレイヤーに近すぎる → 横にかわして衝突回避
+      if (dist < CHAR_SIZE * 2.5) {
+        // プレイヤーと反対方向に飛ぶ
+        cpu.vx += (cx - px) > 0 ? IMPULSE_X : -IMPULSE_X;
+        cpu.vy += IMPULSE_Y;
+        return;
+      }
+
+      // 3. プレイヤーが壁際にいる → 突撃して押し込む
+      var playerPinnedLeft  = player.x < W * 0.22;
+      var playerPinnedRight = player.x + CHAR_SIZE > W * 0.78;
+      var playerPinnedTop   = player.y < H * 0.22;
+      var playerPinnedBot   = player.y + CHAR_SIZE > H * 0.78;
+      if (playerPinnedLeft || playerPinnedRight || playerPinnedTop || playerPinnedBot) {
+        cpu.vx += (px - cx) > 0 ? IMPULSE_X : -IMPULSE_X;
+        cpu.vy += IMPULSE_Y;
+        return;
+      }
+
+      // 4. それ以外 → プレイヤーの背後（壁側）に回り込んでポジション取り
+      // プレイヤーから最も近い壁方向の反対側に陣取る
+      var toLeft   = px;
+      var toRight  = W - px;
+      var toTop    = py;
+      var toBot    = H - py;
+      var minH = Math.min(toLeft, toRight);
+      var minV = Math.min(toTop, toBot);
+      var targetX, targetY;
+      if (minH < minV) {
+        // 左右壁の方が近い → その逆側に回る
+        targetX = toLeft < toRight ? px + W * 0.28 : px - W * 0.28;
+        targetY = py;
+      } else {
+        // 上下壁の方が近い → その逆側に回る
+        targetX = px;
+        targetY = toTop < toBot ? py + H * 0.28 : py - H * 0.28;
+      }
+      cpu.vx += (targetX - cx) > 0 ? IMPULSE_X * 0.75 : -IMPULSE_X * 0.75;
+      cpu.vy += IMPULSE_Y * 0.85;
     }
   }
 
