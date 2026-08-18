@@ -74,6 +74,17 @@ html, body {
   border-radius: 50px;
   cursor: pointer;
   font-family: inherit;
+  text-decoration: none;
+}
+
+.x-share-btn {
+  display: block;
+  background: #000;
+  margin-bottom: 10px;
+}
+
+.ov-btn-retry {
+  background: linear-gradient(135deg, #888, #555);
 }
 
 /* ---- Touch guides ---- */

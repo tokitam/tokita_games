@@ -1,21 +1,24 @@
 (function() {
-  var canvas  = document.getElementById('gameCanvas');
-  var ctx     = canvas.getContext('2d');
-  var overlay = document.getElementById('overlay');
-  var ovTitle = document.getElementById('ov-title');
-  var ovResult= document.getElementById('ov-result');
-  var resEmoji= document.getElementById('res-emoji');
-  var resTitle= document.getElementById('res-title');
-  var resSub  = document.getElementById('res-sub');
-  var touchL  = document.getElementById('touch-left');
-  var touchR  = document.getElementById('touch-right');
+  var canvas     = document.getElementById('gameCanvas');
+  var ctx        = canvas.getContext('2d');
+  var overlay    = document.getElementById('overlay');
+  var ovTitle    = document.getElementById('ov-title');
+  var ovResult   = document.getElementById('ov-result');
+  var ovStageClear = document.getElementById('ov-stage-clear');
+  var ovAllClear = document.getElementById('ov-all-clear');
+  var resEmoji   = document.getElementById('res-emoji');
+  var resTitle   = document.getElementById('res-title');
+  var resSub     = document.getElementById('res-sub');
+  var scTitle    = document.getElementById('sc-title');
+  var acTime     = document.getElementById('ac-time');
+  var touchL     = document.getElementById('touch-left');
+  var touchR     = document.getElementById('touch-right');
 
   var W, H;
   var running  = false;
-  var impulse  = 0; // -1 | 0 | 1 per frame
+  var impulse  = 0;
   var isTouchDevice = false;
 
-  // ---- resize ----
   function resize() {
     W = canvas.width  = window.innerWidth;
     H = canvas.height = window.innerHeight;
@@ -23,7 +26,6 @@
   window.addEventListener('resize', resize);
   resize();
 
-  // ---- keyboard ----
   window.addEventListener('keydown', function(e) {
     if (!running) return;
     Sound.init();
@@ -31,7 +33,6 @@
     if (e.key === 'd' || e.key === 'D') impulse =  1;
   });
 
-  // ---- touch ----
   canvas.addEventListener('touchstart', function(e) {
     e.preventDefault();
     isTouchDevice = true;
@@ -43,10 +44,18 @@
     impulse = t.clientX < W / 2 ? -1 : 1;
   }, { passive: false });
 
-  // ---- start / result buttons ----
   document.getElementById('btn-start').addEventListener('click', startGame);
   document.getElementById('btn-retry').addEventListener('click', startGame);
-  // tap on canvas also fires if overlay visible
+  document.getElementById('btn-retry-all').addEventListener('click', startGame);
+  document.getElementById('btn-next-stage').addEventListener('click', function() {
+    Sound.init();
+    Game.nextStage();
+    running = true;
+    ovStageClear.classList.add('hidden');
+    overlay.classList.add('hidden');
+    requestAnimationFrame(loop);
+  });
+
   overlay.addEventListener('click', function() {
     if (Game.getPhase() === 'title') startGame();
   });
@@ -57,11 +66,12 @@
     running = true;
     overlay.classList.add('hidden');
     ovResult.classList.add('hidden');
+    ovStageClear.classList.add('hidden');
+    ovAllClear.classList.add('hidden');
     ovTitle.classList.remove('hidden');
     requestAnimationFrame(loop);
   }
 
-  // ---- game loop ----
   function loop() {
     if (!running) return;
 
@@ -73,9 +83,20 @@
 
     Game.draw(ctx);
 
-    if (Game.getPhase() === 'result') {
+    var ph = Game.getPhase();
+    if (ph === 'result') {
       running = false;
       showResult();
+      return;
+    }
+    if (ph === 'stage_clear') {
+      running = false;
+      showStageClear();
+      return;
+    }
+    if (ph === 'all_clear') {
+      running = false;
+      showAllClear();
       return;
     }
     requestAnimationFrame(loop);
@@ -100,7 +121,35 @@
       Sound.play('lose');
     }
     ovTitle.classList.add('hidden');
+    ovStageClear.classList.add('hidden');
+    ovAllClear.classList.add('hidden');
     ovResult.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+  }
+
+  function showStageClear() {
+    var st = Game.getStage();
+    scTitle.textContent = 'STAGE ' + st + ' クリア！';
+    Sound.play('win');
+    ovTitle.classList.add('hidden');
+    ovResult.classList.add('hidden');
+    ovAllClear.classList.add('hidden');
+    ovStageClear.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+  }
+
+  function showAllClear() {
+    var secs = Game.getTotalSeconds();
+    acTime.textContent = '総合タイム ' + secs + ' 秒';
+    Sound.play('win');
+    var text = encodeURIComponent('エアクラッシュをクリア！総合タイム ' + secs + ' 秒 #エアクラッシュ');
+    var url  = encodeURIComponent('https://tokitam.github.io/tokita_games/games/air-crash/');
+    document.getElementById('btn-x-share').href =
+      'https://twitter.com/intent/tweet?text=' + text + '&url=' + url;
+    ovTitle.classList.add('hidden');
+    ovResult.classList.add('hidden');
+    ovStageClear.classList.add('hidden');
+    ovAllClear.classList.remove('hidden');
     overlay.classList.remove('hidden');
   }
 })();

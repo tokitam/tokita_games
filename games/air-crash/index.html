@@ -7,7 +7,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>エアクラッシュ！</title>
-  <link rel="stylesheet" href="css/style.css?v=20260814">
+  <link rel="stylesheet" href="css/style.css?v=20260819">
 </head>
 <body>
   <canvas id="gameCanvas"></canvas>
@@ -17,7 +17,7 @@
     <div id="ov-title" class="ov-panel">
       <div class="ov-emoji">⚡</div>
       <div class="ov-title">エアクラッシュ！</div>
-      <div class="ov-sub">空中で相手を壁にぶつけよう！</div>
+      <div class="ov-sub">空中で相手を壁にぶつけよう！全4ステージ！</div>
       <div class="ov-controls">
         <div>PC: <strong>A</strong> 左上に飛ぶ &nbsp; <strong>D</strong> 右上に飛ぶ</div>
         <div>スマホ: 左タップ / 右タップ</div>
@@ -30,14 +30,27 @@
       <div class="ov-sub" id="res-sub"></div>
       <div class="ov-btn" id="btn-retry">もう一度</div>
     </div>
+    <div id="ov-stage-clear" class="ov-panel hidden">
+      <div class="ov-emoji">🎉</div>
+      <div class="ov-title" id="sc-title">STAGE 1 クリア！</div>
+      <div class="ov-sub">次の敵に挑戦しよう！</div>
+      <div class="ov-btn" id="btn-next-stage">次のステージへ</div>
+    </div>
+    <div id="ov-all-clear" class="ov-panel hidden">
+      <div class="ov-emoji">🏆</div>
+      <div class="ov-title">全ステージクリア！</div>
+      <div class="ov-sub" id="ac-time">総合タイム ○○ 秒</div>
+      <a class="ov-btn x-share-btn" id="btn-x-share" href="#" target="_blank" rel="noopener">X でシェア</a>
+      <div class="ov-btn ov-btn-retry" id="btn-retry-all">もう一度</div>
+    </div>
   </div>
 
   <!-- Touch guides -->
   <div id="touch-left"  class="touch-guide tg-left">◀ 左上</div>
   <div id="touch-right" class="touch-guide tg-right">右上 ▶</div>
 
-  <script src="js/sound.js?v=20260814"></script>
-  <script src="js/game.js?v=20260814"></script>
-  <script src="js/main.js?v=20260814"></script>
+  <script src="js/sound.js?v=20260819"></script>
+  <script src="js/game.js?v=20260819"></script>
+  <script src="js/main.js?v=20260819"></script>
 </body>
 </html>
