@@ -1,6 +1,8 @@
-DEMO : https://tokita.net/games/
+デモプレイ : https://tokita.net/games/
+
 <img width="1166" height="1334" alt="スクリーンショット 2026-08-09 232341" src="https://github.com/user-attachments/assets/cd3c86be-5f23-4318-8eec-6f09cc3c450e" />
 
+デモプレイ : https://tokita.net/games/
 
 # tokita_games
 
