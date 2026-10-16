@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <script src="../ga.js?v=20261016" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Just都道府県名！</title>
+  <link rel="stylesheet" href="css/style.css?v=20261016">
+</head>
+<body>
+
+  <!-- Title Screen -->
+  <div id="screen-title" class="screen active">
+    <h1 class="logo">🗾 Just都道府県名！</h1>
+    <p class="rule-text">
+      9つのなかで <strong>ただしい都道府県名</strong> は<br>
+      1つだけ！ タップしてあてよう！<br>
+      <small>（ぜんぶで5問・タイムをきそえ！）</small>
+    </p>
+    <div class="title-hs-wrap">
+      <span class="hs-label">ベストタイム</span>
+      <span id="title-best" class="hs-val">--</span>
+    </div>
+    <button id="btn-start" class="btn-primary">スタート！</button>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen">
+    <div class="game-top">
+      <div class="hud-row">
+        <span class="hud-label">第</span>
+        <span id="hud-q" class="hud-q">1</span>
+        <span class="hud-label">問 / 5</span>
+        <span class="hud-sep"></span>
+        <span class="hud-label">⏱</span>
+        <span id="hud-time" class="hud-time">0.0</span>
+        <span class="hud-label">秒</span>
+      </div>
+    </div>
+
+    <div class="question-area">
+      <div class="question-rule">ただしいのは どれ？</div>
+      <div id="choice-grid" class="choice-grid"></div>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+  </div>
+
+  <!-- Result Screen -->
+  <div id="screen-result" class="screen">
+    <div class="go-inner">
+      <div class="go-emoji">🎉</div>
+      <h2 class="go-title">全問正解！</h2>
+      <div class="go-score-wrap">
+        <div class="go-stat">
+          <span class="go-label">タイム</span>
+          <span id="result-time" class="go-val big">0.00</span>
+          <span class="go-unit">秒</span>
+        </div>
+        <div class="go-stat">
+          <span class="go-label">ベスト</span>
+          <span id="result-best" class="go-val">0.00</span>
+          <span class="go-unit">秒</span>
+        </div>
+      </div>
+      <div id="result-new" class="new-record">NEW RECORD!</div>
+      <button id="btn-share" class="btn-share">𝕏 でシェアする</button>
+      <button id="btn-retry" class="btn-primary">もういちど！</button>
+      <button id="btn-title" class="btn-secondary">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="js/sound.js?v=20261016"></script>
+  <script src="js/data.js?v=20261016"></script>
+  <script src="js/main.js?v=20261016"></script>
+</body>
+</html>
