@@ -59,8 +59,12 @@
     return shuffle(PREFECTURES).slice(0, NUM_Q);
   }
 
+  // 正解 1 件 + 別々の都道府県の誤表記を 1 件ずつ 8 件（いろいろな県名が混ざる）
   function buildQuestion(pref) {
-    var wrongs = shuffle(pref.wrongs).slice(0, NUM_WRONG);
+    var others = shuffle(PREFECTURES.filter(function(p) { return p.name !== pref.name; })).slice(0, NUM_WRONG);
+    var wrongs = others.map(function(p) {
+      return p.wrongs[Math.floor(Math.random() * p.wrongs.length)];
+    });
     return { answer: pref.name, choices: shuffle([pref.name].concat(wrongs)) };
   }
 
