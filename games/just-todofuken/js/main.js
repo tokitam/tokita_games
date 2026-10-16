@@ -172,7 +172,7 @@
 
   function shareToX() {
     var url = window.location.href.replace(/\/index\.html$/, '/');
-    var text = 'Just都道府県名！全問正解！' + fmt(state.lastTime) + '秒でした！\n' + url;
+    var text = 'Just都道府県 全問正解！' + fmt(state.lastTime) + '秒でした！\n' + url + '\n#Just都道府県';
     window.open('https://x.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
   }
 
