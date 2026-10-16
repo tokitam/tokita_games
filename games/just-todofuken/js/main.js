@@ -4,6 +4,7 @@
   var NUM_WRONG  = 8;
   var CORRECT_MS = 700;
   var WRONG_MS   = 500;
+  var PENALTY_SEC = 5;
 
   var state = {};
   var timerInterval = null;
@@ -84,17 +85,25 @@
   // ---- Timer ----
   function startTimer() {
     state.startAt = performance.now();
+    state.penalty = 0;
     state.elapsed = 0;
     tickTimer();
     timerInterval = setInterval(tickTimer, 50);
   }
   function tickTimer() {
-    state.elapsed = (performance.now() - state.startAt) / 1000;
+    state.elapsed = (performance.now() - state.startAt) / 1000 + state.penalty;
     el('hud-time').textContent = state.elapsed.toFixed(1);
   }
   function stopTimer() {
     if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-    state.elapsed = (performance.now() - state.startAt) / 1000;
+    state.elapsed = (performance.now() - state.startAt) / 1000 + state.penalty;
+  }
+
+  function flashPenalty() {
+    var t = el('hud-time');
+    t.classList.remove('penalty');
+    void t.offsetWidth;
+    t.classList.add('penalty');
   }
 
   // ---- Overlay ----
@@ -137,7 +146,10 @@
     state.locked = true;
     Sound.play('wrong');
     btn.classList.add('wrong');
-    showOverlay('不正解…', 'ng', WRONG_MS);
+    state.penalty += PENALTY_SEC;
+    tickTimer();
+    flashPenalty();
+    showOverlay('不正解… +' + PENALTY_SEC + '秒', 'ng', WRONG_MS);
     setTimeout(function() {
       btn.classList.remove('wrong');
       btn.classList.add('disabled');
@@ -163,7 +175,8 @@
       questions: pickQuestions(),
       index: 0,
       locked: false,
-      elapsed: 0
+      elapsed: 0,
+      penalty: 0
     };
     showScreen('game');
     showQuestion();

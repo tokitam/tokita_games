@@ -68,6 +68,11 @@ body {
 .hud-q     { font-size: 1.6rem; font-weight: 900; color: #fff; }
 .hud-sep   { flex: 1; }
 .hud-time  { font-size: 1.8rem; font-weight: 900; color: #FFD54F; min-width: 64px; text-align: right; font-variant-numeric: tabular-nums; }
+.hud-time.penalty { animation: penaltyFlash 0.5s ease-out; }
+@keyframes penaltyFlash {
+  0%   { color: #FF5252; transform: scale(1.3); }
+  100% { color: #FFD54F; transform: scale(1); }
+}
 
 .question-area {
   flex: 1;
