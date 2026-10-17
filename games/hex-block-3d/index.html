@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <script src="../ga.js?v=20260813" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>ヘクサバースト</title>
+  <link rel="stylesheet" href="css/style.css?v=20260814">
+</head>
+<body>
+  <canvas id="renderCanvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hud hidden">
+    <div class="hud-left">
+      <div class="hud-label">スコア</div>
+      <div class="hud-value" id="score">0</div>
+    </div>
+    <div class="hud-right">
+      <div class="hud-label">NEXT</div>
+      <div class="next-dots" id="next-dots"></div>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" class="overlay">
+    <div class="overlay-inner" id="ov-title">
+      <div class="big-emoji">🔷</div>
+      <div class="ov-title">ヘクサバースト</div>
+      <div class="ov-sub">同じ色を5個つなげて消そう！</div>
+      <div class="ov-best">ハイスコア: <span id="title-best">0</span></div>
+      <div class="ov-hint">タップしてスタート</div>
+    </div>
+    <div class="overlay-inner hidden" id="ov-gameover">
+      <div class="big-emoji">💥</div>
+      <div class="ov-title">ゲームオーバー</div>
+      <div class="ov-score">スコア: <span id="go-score">0</span></div>
+      <div class="ov-best">ベスト: <span id="go-best">0</span></div>
+      <div class="ov-hint">タップでリスタート</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="js/sound.js?v=20260814"></script>
+  <script src="js/hexGrid.js?v=20260814"></script>
+  <script src="js/game.js?v=20260814"></script>
+  <script src="js/main.js?v=20260814"></script>
+</body>
+</html>

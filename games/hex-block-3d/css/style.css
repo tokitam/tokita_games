@@ -1,0 +1,116 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: #080c14;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#renderCanvas {
+  width: 100%; height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+/* ---- HUD ---- */
+.hud {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 14px 18px;
+  pointer-events: none;
+}
+.hud.hidden { display: none; }
+
+.hud-left, .hud-right {
+  background: rgba(0,0,0,0.55);
+  border-radius: 12px;
+  padding: 8px 14px;
+  min-width: 70px;
+}
+.hud-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  margin-bottom: 2px;
+}
+.hud-value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #FFD54F;
+  font-family: sans-serif;
+}
+.hud-right { text-align: right; }
+
+.next-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+.next-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+/* ---- Overlay ---- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.65);
+  z-index: 10;
+}
+.overlay.hidden { display: none; }
+
+.overlay-inner {
+  background: rgba(20,24,40,0.97);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 24px;
+  padding: 36px 40px;
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+  font-family: sans-serif;
+}
+.overlay-inner.hidden { display: none; }
+
+.big-emoji { font-size: 3rem; margin-bottom: 10px; }
+.ov-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.ov-sub {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 16px;
+}
+.ov-score, .ov-best {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 6px;
+}
+.ov-best { color: #FFD54F; margin-bottom: 20px; }
+.ov-hint {
+  display: inline-block;
+  background: linear-gradient(135deg, #6c63ff, #a855f7);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 12px 28px;
+  border-radius: 50px;
+  cursor: pointer;
+}
